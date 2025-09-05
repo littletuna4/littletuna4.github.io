@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Service Index</title>
+  <style>
+    :root {
+      --bg: #0f1220;
+      --card: #151a2b;
+      --text: #e7e9ef;
+      --muted: #9aa3b2;
+      --accent: #7aa2ff;
+      --accent-2: #8ef0c5;
+      --ring: rgba(122, 162, 255, 0.35);
+      --shadow: 0 20px 60px rgba(0,0,0,0.35);
+      --radius: 22px;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      margin: 0;
+      color: var(--text);
+      background: radial-gradient(1200px 800px at 50% -10%, rgba(122,162,255,.15), transparent 60%),
+                  radial-gradient(800px 600px at 100% 100%, rgba(142,240,197,.08), transparent 60%),
+                  var(--bg);
+      font: 500 18px/1.45 ui-sans-serif, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial;
+    }
+    .wrap {
+      min-height: 100%;
+      display: grid;
+      place-items: center;
+      padding: 40px 20px;
+    }
+    .container {
+      width: min(980px, 92vw);
+      text-align: center;
+    }
+    h1 {
+      font-size: clamp(32px, 4vw, 56px);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin: 0 0 18px;
+    }
+    p.lead {
+      margin: 0 0 36px;
+      color: var(--muted);
+      font-size: clamp(16px, 2vw, 22px);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)) , var(--card);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px 26px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 26px 80px rgba(0,0,0,0.5);
+      border-color: rgba(122,162,255,0.35);
+    }
+    .title {
+      font-size: clamp(22px, 2.2vw, 30px);
+      letter-spacing: -0.01em;
+    }
+    .actions {
+      margin-top: 6px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 18px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: linear-gradient(180deg, rgba(122,162,255,.20), rgba(122,162,255,.10));
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 17px;
+      transition: box-shadow .18s ease, transform .18s ease, border-color .18s ease;
+    }
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--ring);
+      box-shadow: 0 10px 40px rgba(122,162,255,.22);
+    }
+    .url {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 14px;
+      color: var(--muted);
+      word-break: break-all;
+      padding-top: 12px;
+      border-top: 1px dashed rgba(255,255,255,0.1);
+      width: 100%;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <main class="container">
+      <h1>Service Index</h1>
+      <p class="lead">Large, centered, minimal.</p>
+      <section class="grid" id="linkGrid"></section>
+    </main>
+  </div>
+
+  <script>
+    const links = [
+      { label: "VW App", link: "https://vw-1040520853607.australia-southeast1.run.app" },
+      { label: "n8n (ton8n)", link: "https://ton8n-1040520853607.australia-southeast2.run.app" },
+      { label: "noVNC (tonovnc)", link: "https://tonovnc-1040520853607.australia-southeast2.run.app" }
+    ];
+
+    const grid = document.getElementById("linkGrid");
+    grid.innerHTML = links.map(item => `
+      <article class="card">
+        <div class="title">${item.label}</div>
+        <div class="actions">
+          <a class="btn" href="${item.link}" target="_blank" rel="noopener">Open</a>
+        </div>
+        <div class="url">${item.link}</div>
+      </article>
+    `).join("");
+  </script>
+</body>
+</html>
