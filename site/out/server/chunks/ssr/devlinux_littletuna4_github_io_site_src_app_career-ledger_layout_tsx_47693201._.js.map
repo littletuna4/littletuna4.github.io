@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///home/devlinux/devlinux/littletuna4.github.io/site/src/app/career-ledger/layout.tsx"],"sourcesContent":["/**\n * Career Ledger Layout\n *\n * Functional Requirements:\n * - Provide consistent layout for all career ledger pages\n * - Maintain responsive design and theme consistency\n * - Support markdown content rendering\n */\n\nexport default function CareerLedgerLayout({\n  children,\n}: {\n  children: React.ReactNode;\n}): React.JSX.Element {\n  return (\n    <div className='min-h-screen bg-background'>\n      <div className='container mx-auto px-6 py-20'>\n        <div className='max-w-4xl mx-auto prose prose-lg dark:prose-invert max-w-none'>\n          {children}\n        </div>\n      </div>\n    </div>\n  );\n}\n"],"names":[],"mappings":"AAAA;;;;;;;CAOC;;;;;;AAEc,SAAS,mBAAmB,EACzC,QAAQ,EAGT;IACC,qBACE,gaAAC;QAAI,WAAU;kBACb,cAAA,gaAAC;YAAI,WAAU;sBACb,cAAA,gaAAC;gBAAI,WAAU;0BACZ;;;;;;;;;;;;;;;;AAKX","debugId":null}}]
+}

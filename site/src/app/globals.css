@@ -1,0 +1,425 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+@layer base {
+  :root {
+    /* Light mode colors - Navy-Green Theme with Pink Highlights */
+    --background: 210 25% 97%; /* Light navy-tinted white */
+    --background-secondary: 210 20% 95%; /* Lighter navy-tinted */
+    --background-tertiary: 210 15% 92%; /* Very light navy-tinted */
+    --background-muted: 210 12% 90%; /* Muted navy-tinted */
+
+    --foreground: 215 50% 12%; /* Deep navy blue */
+    --foreground-secondary: 215 40% 18%; /* Medium navy blue */
+    --foreground-tertiary: 215 35% 32%; /* Muted navy blue */
+    --foreground-muted: 215 30% 45%; /* Light navy blue */
+
+    /* Primary colors - Navy Blue */
+    --primary: 215 50% 25%; /* Rich navy blue */
+    --primary-foreground: 210 25% 97%; /* Light navy-tinted white */
+    --primary-50: 210 30% 92%; /* Very light navy */
+    --primary-100: 210 28% 85%; /* Light navy */
+    --primary-200: 210 25% 75%; /* Medium-light navy */
+    --primary-300: 210 22% 65%; /* Medium navy */
+    --primary-400: 210 30% 45%; /* Navy blue */
+    --primary-500: 215 50% 25%; /* Rich navy blue */
+    --primary-600: 215 55% 20%; /* Dark navy blue */
+    --primary-700: 215 60% 15%; /* Very dark navy */
+    --primary-800: 215 65% 10%; /* Deep navy */
+    --primary-900: 215 70% 5%; /* Darkest navy */
+
+    /* Secondary colors - Navy-Teal Green */
+    --secondary: 180 33% 27%; /* Navy-teal green */
+    --secondary-foreground: 210 25% 97%; /* Light navy-tinted white */
+
+    /* Accent colors - Pink Highlight */
+    --accent: 330 80% 60%; /* Pink highlight */
+    --accent-foreground: 210 25% 97%; /* Light navy-tinted white */
+
+    /* Semantic colors - Navy-Green Theme */
+    --destructive: 0 72% 51%; /* Red for errors */
+    --destructive-foreground: 210 25% 97%; /* Light navy-tinted white */
+
+    --success: 161 90% 20%; /* Teal-green for success */
+    --success-foreground: 210 25% 97%; /* Light navy-tinted white */
+
+    --warning: 37 93% 44%; /* Amber for warnings */
+    --warning-foreground: 215 50% 12%; /* Deep navy blue */
+
+    --info: 199 97% 40%; /* Cyan-blue for info */
+    --info-foreground: 210 25% 97%; /* Light navy-tinted white */
+
+    /* UI elements - Navy-Green Theme */
+    --border: 210 20% 80%; /* Light navy border */
+    --input: 210 20% 80%; /* Light navy input */
+    --ring: 215 50% 25%; /* Rich navy blue ring */
+
+    --card: 210 25% 97%; /* Light navy-tinted white card */
+    --card-foreground: 215 50% 12%; /* Deep navy blue */
+
+    --popover: 210 25% 97%; /* Light navy-tinted white popover */
+    --popover-foreground: 215 50% 12%; /* Deep navy blue */
+
+    --muted: 210 15% 88%; /* Muted navy */
+    --muted-foreground: 215 35% 35%; /* Muted navy text */
+
+    /* Border radius */
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* Dark mode colors - Navy-Green Theme with Pink Highlights */
+    --background: 215 50% 12%; /* Deep navy blue */
+    --background-secondary: 215 45% 8%; /* Darker navy blue */
+    --background-tertiary: 215 40% 12%; /* Medium dark navy */
+    --background-muted: 215 35% 16%; /* Muted dark navy */
+
+    --foreground: 200 90% 95%; /* Light cyan-tinted white */
+    --foreground-secondary: 200 85% 85%; /* Medium cyan-tinted */
+    --foreground-tertiary: 200 80% 75%; /* Muted cyan-tinted */
+    --foreground-muted: 200 75% 65%; /* Light cyan-tinted */
+
+    /* Primary colors - Navy Blue with Teal Tint (Dark Mode) */
+    --primary: 210 75% 59%; /* Medium blue with teal tint */
+    --primary-foreground: 215 50% 12%; /* Deep navy blue */
+    --primary-50: 215 50% 12%; /* Deep navy */
+    --primary-100: 215 45% 15%; /* Dark navy */
+    --primary-200: 215 40% 20%; /* Medium dark navy */
+    --primary-300: 215 45% 30%; /* Medium navy */
+    --primary-400: 210 70% 45%; /* Navy blue */
+    --primary-500: 210 75% 59%; /* Medium blue with teal tint */
+    --primary-600: 210 80% 65%; /* Light blue with teal tint */
+    --primary-700: 210 85% 75%; /* Lighter blue with teal tint */
+    --primary-800: 210 90% 85%; /* Light blue with teal tint */
+    --primary-900: 210 95% 95%; /* Very light blue with teal tint */
+
+    /* Secondary colors - Dark Navy (Dark Mode) */
+    --secondary: 215 50% 25%; /* Dark navy blue */
+    --secondary-foreground: 200 90% 95%; /* Light cyan-tinted white */
+
+    /* Accent colors - Bright Pink Highlight (Dark Mode) */
+    --accent: 330 80% 70%; /* Bright pink highlight */
+    --accent-foreground: 215 50% 12%; /* Deep navy blue */
+
+    /* Semantic colors - Navy-Green Theme (Dark Mode) */
+    --destructive: 0 84% 60%; /* Light red for errors */
+    --destructive-foreground: 200 90% 95%; /* Light cyan-tinted white */
+
+    --success: 161 84% 39%; /* Bright teal-green for success */
+    --success-foreground: 215 50% 12%; /* Deep navy blue */
+
+    --warning: 38 92% 50%; /* Bright amber for warnings */
+    --warning-foreground: 215 50% 12%; /* Deep navy blue */
+
+    --info: 188 95% 43%; /* Bright cyan for info */
+    --info-foreground: 215 50% 12%; /* Deep navy blue */
+
+    /* UI elements - Navy-Green Theme (Dark Mode) */
+    --border: 215 35% 16%; /* Dark navy border */
+    --input: 215 35% 16%; /* Dark navy input */
+    --ring: 210 75% 59%; /* Medium blue with teal tint ring */
+
+    --card: 215 50% 12%; /* Deep navy blue card */
+    --card-foreground: 200 90% 95%; /* Light cyan-tinted white */
+
+    --popover: 215 50% 12%; /* Deep navy blue popover */
+    --popover-foreground: 200 90% 95%; /* Light cyan-tinted white */
+
+    --muted: 215 35% 16%; /* Muted dark navy */
+    --muted-foreground: 200 80% 75%; /* Muted cyan-tinted text */
+  }
+}
+
+@theme {
+  --color-background: hsl(var(--background));
+  --color-background-secondary: hsl(var(--background-secondary));
+  --color-background-tertiary: hsl(var(--background-tertiary));
+  --color-background-muted: hsl(var(--background-muted));
+
+  --color-foreground: hsl(var(--foreground));
+  --color-foreground-secondary: hsl(var(--foreground-secondary));
+  --color-foreground-tertiary: hsl(var(--foreground-tertiary));
+  --color-foreground-muted: hsl(var(--foreground-muted));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-primary-50: hsl(var(--primary-50));
+  --color-primary-100: hsl(var(--primary-100));
+  --color-primary-200: hsl(var(--primary-200));
+  --color-primary-300: hsl(var(--primary-300));
+  --color-primary-400: hsl(var(--primary-400));
+  --color-primary-500: hsl(var(--primary-500));
+  --color-primary-600: hsl(var(--primary-600));
+  --color-primary-700: hsl(var(--primary-700));
+  --color-primary-800: hsl(var(--primary-800));
+  --color-primary-900: hsl(var(--primary-900));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-success: hsl(var(--success));
+  --color-success-foreground: hsl(var(--success-foreground));
+
+  --color-warning: hsl(var(--warning));
+  --color-warning-foreground: hsl(var(--warning-foreground));
+
+  --color-info: hsl(var(--info));
+  --color-info-foreground: hsl(var(--info-foreground));
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
+
+  --radius: var(--radius);
+}
+
+@layer base {
+  /* Prevent flash of unstyled content */
+  html {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    /* Fallback for when CSS variables aren't loaded yet - Navy-Green Theme with Pink Highlights */
+    background-color: #f0f4f8;
+    color: #0a1829;
+  }
+
+  html.dark {
+    background-color: #0a1829;
+    color: #e0f2fe;
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    /* Fallback for when CSS variables aren't loaded yet - Navy-Green Theme with Pink Highlights */
+    background-color: #f0f4f8;
+    color: #0a1829;
+  }
+
+  .dark body {
+    background-color: #0a1829;
+    color: #e0f2fe;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
+  }
+
+  /* Smooth transitions for theme switching */
+  * {
+    transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-background-muted;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/30 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/50;
+  }
+
+  /* Focus styles */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  /* Selection styles */
+  ::selection {
+    @apply bg-primary/20 text-primary-foreground;
+  }
+
+  /* Typography defaults */
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    line-height: 2.5rem;
+    margin-bottom: 0.75em;
+    letter-spacing: -0.02em;
+  }
+  h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 2.25rem;
+    margin-bottom: 0.65em;
+    letter-spacing: -0.01em;
+  }
+  h3 {
+    font-size: 1.375rem;
+    font-weight: 600;
+    line-height: 2rem;
+    margin-bottom: 0.6em;
+  }
+  h4 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.75rem;
+    margin-bottom: 0.5em;
+  }
+  h5 {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.5rem;
+    margin-bottom: 0.4em;
+  }
+  h6 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    margin-bottom: 0.3em;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  p {
+    margin-bottom: 1em;
+    line-height: 1.7;
+    color: hsl(var(--foreground-secondary));
+  }
+  ul,
+  ol {
+    padding-left: 1.25em;
+    margin-bottom: 1em;
+  }
+  li {
+    margin-bottom: 0.3em;
+    line-height: 1.6;
+  }
+  a.link {
+    color: hsl(var(--primary));
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s;
+  }
+  a.link:hover,
+  a.link:focus {
+    color: hsl(var(--primary-600));
+    outline: none;
+  }
+
+  blockquote {
+    border-left: 3px solid hsl(var(--primary));
+    padding-left: 1em;
+    color: hsl(var(--foreground-tertiary));
+    font-style: italic;
+    margin: 1.5em 0;
+  }
+  code {
+    background: hsl(var(--background-tertiary));
+    color: hsl(var(--accent));
+    padding: 0.15em 0.4em;
+    border-radius: 0.3em;
+    font-size: 0.95em;
+    font-family: var(--font-mono);
+  }
+  pre {
+    background: hsl(var(--background-tertiary));
+    color: hsl(var(--accent-foreground));
+    padding: 1em;
+    border-radius: 0.5em;
+    overflow-x: auto;
+    font-size: 0.98em;
+    font-family: var(--font-mono);
+    margin-bottom: 1.5em;
+  }
+  /* Responsive typography */
+  @media (max-width: 600px) {
+    h1 {
+      font-size: 1.6rem;
+      line-height: 2rem;
+    }
+    h2 {
+      font-size: 1.3rem;
+      line-height: 1.8rem;
+    }
+    h3 {
+      font-size: 1.1rem;
+      line-height: 1.5rem;
+    }
+  }
+}
+
+@layer utilities {
+  /* Animated gradient border animations */
+  @keyframes gradient-shift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  @keyframes gradient-shift-reverse {
+    0% {
+      background-position: 100% 50%;
+    }
+    50% {
+      background-position: 0% 50%;
+    }
+    100% {
+      background-position: 100% 50%;
+    }
+  }
+
+  .animate-gradient-shift {
+    animation: gradient-shift 3s ease-in-out infinite;
+  }
+
+  .animate-gradient-shift-reverse {
+    animation: gradient-shift-reverse 3s ease-in-out infinite;
+  }
+
+  /* Sigma.js specific overrides to ensure interactivity */
+  .sigma-container,
+  .sigma-container * {
+    pointer-events: auto !important;
+  }
+
+  .sigma-container canvas {
+    pointer-events: auto !important;
+    user-select: none !important;
+    touch-action: none !important;
+  }
+}

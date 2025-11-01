@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["file:///home/devlinux/devlinux/littletuna4.github.io/site/src/components/Industries/sigma.css"],"sourcesContent":["/* Ensure Sigma containers always have height */\ndiv[data-sigma-container] {\n  min-height: 400px !important;\n  /* Enable touch dragging by disabling browser gestures (pinch/scroll) inside graph */\n  touch-action: none;\n}\n\n/* Force proper height for graph containers */\n.sigma-container {\n  height: 100% !important;\n  min-height: 400px !important;\n  /* Ensure pointer/touch events behave consistently */\n  touch-action: none;\n}\n"],"names":[],"mappings":"AACA;;;;;AAOA","debugId":null}}]
+}
