@@ -3,7 +3,7 @@ name: Build and Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # or whatever your default branch is
+      - main # or whatever your default branch is
 
 permissions:
   contents: read
@@ -11,7 +11,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: 'pages'
   cancel-in-progress: false
 
 jobs:
@@ -19,29 +19,29 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./ytpn
+        working-directory: ./site
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
         with:
-          version: 9  # or specify your pnpm version
-      
+          version: 9 # or specify your pnpm version
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'pnpm'
-          cache-dependency-path: './ytpn/pnpm-lock.yaml'
-      
+          cache-dependency-path: './site/pnpm-lock.yaml'
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      
+
       - name: Build
         run: pnpm run build
-      
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
