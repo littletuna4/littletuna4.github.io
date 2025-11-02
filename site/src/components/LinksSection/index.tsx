@@ -105,8 +105,8 @@ export default function LinksSection(): React.JSX.Element {
                 <div className='text-primary group-hover:text-primary/80 transition-colors'>
                   {getIconForLink(link.label)}
                 </div>
-                <div className='flex items-center gap-2'>
-                  <h3 className='text-lg font-semibold text-foreground text-center'>
+                <div className='flex flex-grow items-center align-middle gap-2'>
+                  <h3 className='text-lg font-semibold text-foreground text-center align-middle m-2'>
                     {link.label}
                   </h3>
                   {external && (

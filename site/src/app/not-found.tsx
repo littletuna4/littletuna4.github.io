@@ -1,33 +1,72 @@
 /**
- * Main Application 404 Not Found Page
+ * Personal Site 404 Not Found Page
  *
  * Functional Requirements:
- * - Display a professional 404 error message when a page is not found
- * - Provide clear navigation options back to the main site and key sections
+ * - Display a friendly and personal 404 error message when a page is not found
+ * - Provide clear navigation options back to main site sections
+ * - Include a fun, interactive searching animation element
  * - Maintain consistent styling with the main application theme system
- * - Include helpful suggestions for users to find what they're looking for
- * - Use semantic HTML structure for accessibility
+ * - Use lucide-react icons instead of emojis
  * - Support both light and dark mode themes
  * - Include contact information for additional assistance
- * - Display branding consistently
- * - Provide multiple navigation paths (home, services, blog, contact)
  * - Use proper typography hierarchy and spacing
- * - Include subtle animations or visual elements to maintain engagement
  * - Ensure mobile responsiveness across all device sizes
  * - Follow WCAG accessibility guidelines for contrast and navigation
+ * - Create an engaging and personal user experience
  */
+
+'use client';
 
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import {
+  Home,
+  BookOpen,
+  Briefcase,
+  Link as LinkIcon,
+  Search,
+  ArrowLeft,
+  Mail,
+  Phone,
+} from 'lucide-react';
 import { APP_CONSTS } from '@/data/app';
 
-export default function MainApplicationNotFoundPage(): React.JSX.Element {
+function SearchingAnimation(): React.JSX.Element {
+  return (
+    <div className='relative mb-12 h-32 flex items-center justify-center'>
+      <div className='relative'>
+        {/* Main searching icon with animation */}
+        <div className='animate-bounce'>
+          <Search
+            className='w-16 h-16 text-primary'
+            strokeWidth={1.5}
+            aria-hidden='true'
+          />
+        </div>
+        {/* Floating dots around the search icon with staggered animation */}
+        <div className='absolute -top-2 -left-2 w-3 h-3 bg-accent rounded-full animate-ping opacity-75' />
+        <div
+          className='absolute -bottom-2 -right-2 w-2 h-2 bg-accent rounded-full animate-ping opacity-75'
+          style={{ animationDelay: '0.3s' }}
+        />
+        <div
+          className='absolute top-0 -right-4 w-2 h-2 bg-primary/60 rounded-full animate-ping opacity-75'
+          style={{ animationDelay: '0.5s' }}
+        />
+      </div>
+    </div>
+  );
+}
+
+export default function PersonalSiteNotFoundPage(): React.JSX.Element {
   return (
     <div className='min-h-screen bg-background flex flex-col'>
       {/* Main Content Area */}
       <div className='flex-1 flex items-center justify-center px-4 py-16'>
         <div className='max-w-4xl mx-auto text-center'>
+          {/* Fun Searching Animation */}
+          <SearchingAnimation />
+
           {/* 404 Visual Element */}
           <div className='mb-8'>
             <div className='text-8xl md:text-9xl font-bold text-foreground-muted mb-4'>
@@ -42,9 +81,9 @@ export default function MainApplicationNotFoundPage(): React.JSX.Element {
               Page Not Found
             </h1>
             <p className='text-lg text-foreground-secondary mb-6 max-w-2xl mx-auto leading-relaxed'>
-              The page you&apos;re looking for doesn&apos;t exist or may have
-              been moved. Don&apos;t worry, we&apos;ll help you get back on
-              track with the YTPN community.
+              Looks like you&apos;ve wandered off the beaten path! This page
+              doesn&apos;t exist (yet) or may have moved. Let me help you find
+              your way back.
             </p>
           </div>
 
@@ -57,56 +96,80 @@ export default function MainApplicationNotFoundPage(): React.JSX.Element {
               {/* Home */}
               <Link
                 href='/'
-                className='group p-6 bg-background-secondary hover:bg-background-tertiary border border-border rounded-lg transition-all duration-200 hover:shadow-md'
+                className='group p-6 bg-background-secondary hover:bg-background-tertiary border border-border rounded-lg transition-all duration-200 hover:shadow-md hover:-translate-y-1'
               >
-                <div className='text-2xl mb-3'>🏠</div>
+                <div className='mb-3 flex justify-center'>
+                  <Home
+                    className='w-8 h-8 text-primary group-hover:text-accent transition-colors'
+                    strokeWidth={1.5}
+                    aria-hidden='true'
+                  />
+                </div>
                 <h3 className='font-semibold text-foreground mb-2 group-hover:text-primary transition-colors'>
                   Home
                 </h3>
                 <p className='text-sm text-foreground-secondary'>
-                  Return to {APP_CONSTS.APP_NAME} homepage
+                  Back to the homepage
                 </p>
               </Link>
 
-              {/* Events */}
+              {/* Blog */}
               <Link
-                href='/events'
-                className='group p-6 bg-background-secondary hover:bg-background-tertiary border border-border rounded-lg transition-all duration-200 hover:shadow-md'
+                href='/blog'
+                className='group p-6 bg-background-secondary hover:bg-background-tertiary border border-border rounded-lg transition-all duration-200 hover:shadow-md hover:-translate-y-1'
               >
-                <div className='text-2xl mb-3'>📅</div>
+                <div className='mb-3 flex justify-center'>
+                  <BookOpen
+                    className='w-8 h-8 text-primary group-hover:text-accent transition-colors'
+                    strokeWidth={1.5}
+                    aria-hidden='true'
+                  />
+                </div>
                 <h3 className='font-semibold text-foreground mb-2 group-hover:text-primary transition-colors'>
-                  Events
+                  Blog
                 </h3>
                 <p className='text-sm text-foreground-secondary'>
-                  View upcoming networking events
+                  Read my latest posts
                 </p>
               </Link>
 
-              {/* Services */}
+              {/* Career Ledger */}
               <Link
-                href='/#services'
-                className='group p-6 bg-background-secondary hover:bg-background-tertiary border border-border rounded-lg transition-all duration-200 hover:shadow-md'
+                href='/career-ledger'
+                className='group p-6 bg-background-secondary hover:bg-background-tertiary border border-border rounded-lg transition-all duration-200 hover:shadow-md hover:-translate-y-1'
               >
-                <div className='text-2xl mb-3'>🤝</div>
+                <div className='mb-3 flex justify-center'>
+                  <Briefcase
+                    className='w-8 h-8 text-primary group-hover:text-accent transition-colors'
+                    strokeWidth={1.5}
+                    aria-hidden='true'
+                  />
+                </div>
                 <h3 className='font-semibold text-foreground mb-2 group-hover:text-primary transition-colors'>
-                  Get Involved
+                  Career Ledger
                 </h3>
                 <p className='text-sm text-foreground-secondary'>
-                  Join, sponsor, or nominate
+                  My professional journey
                 </p>
               </Link>
 
-              {/* Sponsors */}
+              {/* Links */}
               <Link
-                href='/partners'
-                className='group p-6 bg-background-secondary hover:bg-background-tertiary border border-border rounded-lg transition-all duration-200 hover:shadow-md'
+                href='/#links'
+                className='group p-6 bg-background-secondary hover:bg-background-tertiary border border-border rounded-lg transition-all duration-200 hover:shadow-md hover:-translate-y-1'
               >
-                <div className='text-2xl mb-3'>💼</div>
+                <div className='mb-3 flex justify-center'>
+                  <LinkIcon
+                    className='w-8 h-8 text-primary group-hover:text-accent transition-colors'
+                    strokeWidth={1.5}
+                    aria-hidden='true'
+                  />
+                </div>
                 <h3 className='font-semibold text-foreground mb-2 group-hover:text-primary transition-colors'>
-                  Partners
+                  Links
                 </h3>
                 <p className='text-sm text-foreground-secondary'>
-                  Meet our supporting partners
+                  Connect with me online
                 </p>
               </Link>
             </div>
@@ -116,9 +179,9 @@ export default function MainApplicationNotFoundPage(): React.JSX.Element {
           <div className='mb-8'>
             <Link
               href='/'
-              className='inline-flex items-center px-8 py-4 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl'
+              className='inline-flex items-center px-8 py-4 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5'
             >
-              <span className='mr-2'>←</span>
+              <ArrowLeft className='w-5 h-5 mr-2' aria-hidden='true' />
               Back to Home
             </Link>
           </div>
@@ -131,8 +194,9 @@ export default function MainApplicationNotFoundPage(): React.JSX.Element {
             <div className='flex flex-col sm:flex-row gap-4 justify-center items-center'>
               <Link
                 href={`mailto:${APP_CONSTS.APP_CONTACT_EMAIL}`}
-                className='text-primary hover:text-primary/80 transition-colors font-medium'
+                className='inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors font-medium'
               >
+                <Mail className='w-4 h-4' aria-hidden='true' />
                 {APP_CONSTS.APP_CONTACT_EMAIL}
               </Link>
               {APP_CONSTS.APP_CONTACT_PHONE && (
@@ -142,8 +206,9 @@ export default function MainApplicationNotFoundPage(): React.JSX.Element {
                   </span>
                   <Link
                     href={`tel:${APP_CONSTS.APP_CONTACT_PHONE}`}
-                    className='text-primary hover:text-primary/80 transition-colors font-medium'
+                    className='inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors font-medium'
                   >
+                    <Phone className='w-4 h-4' aria-hidden='true' />
                     {APP_CONSTS.APP_CONTACT_PHONE}
                   </Link>
                 </>
@@ -153,18 +218,9 @@ export default function MainApplicationNotFoundPage(): React.JSX.Element {
         </div>
       </div>
 
-      {/* {APP_CONSTS.APP_NAME} Branding */}
+      {/* Footer Branding */}
       <div className='bg-background-tertiary border-t border-border py-8'>
         <div className='container mx-auto px-6 text-center'>
-          <div className='flex items-center justify-center mb-4'>
-            <Image
-              src='/logo.png'
-              alt={APP_CONSTS.APP_NAME}
-              width={180}
-              height={50}
-              className='h-10 w-auto opacity-60'
-            />
-          </div>
           <p className='text-foreground-muted text-sm'>
             {APP_CONSTS.APP_NAME} - {APP_CONSTS.APP_DESCRIPTION}
           </p>

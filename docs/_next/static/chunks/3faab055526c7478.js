@@ -1,1 +1,0 @@
-(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,885,e=>{"use strict";e.s(["default",()=>o]);var i=e.i(81583),t=e.i(99872);function o(){return(0,i.jsx)("div",{className:"min-h-screen bg-background overflow-hidden position-relative",children:(0,i.jsx)(t.default,{})})}}]);

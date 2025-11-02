@@ -27,11 +27,36 @@ export async function generateStaticParams(): Promise<
 
   const staticParams: Array<{ slug: string[] }> = [{ slug: [] }]; // Root page
 
+  // Directories to skip when scanning
+  const skipDirectories = new Set([
+    '[[...slug]]',
+    '.git',
+    '.cursor',
+    'node_modules',
+    '.next',
+    'out',
+  ]);
+
   function scanDirectory(dirPath: string, segments: string[]): void {
     try {
+      // Skip if directory doesn't exist
+      if (!fs.existsSync(dirPath)) {
+        return;
+      }
+
       const entries = fs.readdirSync(dirPath, { withFileTypes: true });
 
       for (const entry of entries) {
+        // Skip hidden files and directories
+        if (entry.name.startsWith('.')) {
+          continue;
+        }
+
+        // Skip directories in the skip list
+        if (entry.isDirectory() && skipDirectories.has(entry.name)) {
+          continue;
+        }
+
         const entryPath = path.join(dirPath, entry.name);
 
         if (entry.isDirectory()) {
@@ -63,6 +88,11 @@ export async function generateStaticParams(): Promise<
   }
 
   scanDirectory(careerLedgerPath, []);
+
+  // Ensure we have at least the root page
+  if (staticParams.length === 0) {
+    staticParams.push({ slug: [] });
+  }
 
   return staticParams;
 }
