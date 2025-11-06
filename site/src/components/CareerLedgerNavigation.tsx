@@ -93,5 +93,3 @@ export default function CareerLedgerNavigation(): React.JSX.Element {
     </nav>
   );
 }
-
-
