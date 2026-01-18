@@ -22,7 +22,7 @@ interface BlogPostsListProps {
   posts: PostListItem[];
 }
 
-const POSTS_PER_BATCH = 5;
+const POSTS_PER_BATCH = 10;
 
 export default function BlogPostsList({ posts }: BlogPostsListProps) {
   const [visibleCount, setVisibleCount] = useState(POSTS_PER_BATCH);
