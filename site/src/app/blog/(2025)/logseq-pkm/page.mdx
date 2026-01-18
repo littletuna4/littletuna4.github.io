@@ -1,0 +1,35 @@
+# Building a Personal Knowledge Management Stack with GCP and Logseq
+
+I've been experimenting with Google Cloud Platform (GCP) to assemble a personal toolset. Lately, the volume of information I've been juggling has left me feeling overwhelmed. To tame that, I've turned toward personal knowledge management platforms like Obsidian.
+
+However, my preferences are a bit tricky: I want open-source options, I want to own my data, and I think it's a good idea to have it all structured in a way that's digestible by large language models (LLMs). That combination led me to Logseq.
+
+## The Logseq Dilemma
+
+Logseq checks a lot of boxes in terms of features, but one issue stands out: it's **local-first**. I want to maintain a synchronized graph across my phone, personal computer, and, on occassion, devices I don't own (no installations or use of file system for my own graph). Unfortunately, Logseq's built-in sync is weak, and there's hosted front end uses the local filesystem as the data base.
+
+## Database Storage
+
+Logseq's database is straightforward: a collection of cross-referenced, human-readable Markdown files. Perfect. That makes an S3-compatible bucket an ideal backend. Since I'm leaning into GCP, I decided to use a Google Cloud Storage bucket.
+
+## Syncing Across Devices
+
+### Laptop
+
+For the laptop, mounting to an S3-compatible bucket is simple with rclone. It handles the file synchronization reliably.
+
+### Smartphone
+
+On Android, I used FolderSync to connect and authenticate with the GCP bucket. Syncing runs on a schedule—every hour feels like a good compromise between battery consumption and freshness. Ideally, it would be event-driven file watching, but for now this serves as a minimum viable product (MVP).
+
+## Hosted Access on the Go
+
+The final challenge is being able to access Logseq from any arbitrary, internet-connected machine. That requires a hosted instance of Logseq, premounted to the bucket database.
+
+Since this project only has a single user, running a 24/7 VM isn't sensible. Instead, the compromise is a lightweight, Dockerized remote desktop. For this, I used accetto's noVNC Docker image deployed with Cloud Run, mounted directly to the storage bucket.
+
+This setup allows me to run Logseq in the browser, without downloading software or exposing my entire, personal knowledge graph.
+
+## Logseq implementation Architecture
+
+![Logseq PKM Architecture](./logseqarch.png)

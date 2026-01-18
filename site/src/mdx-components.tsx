@@ -63,8 +63,8 @@ const CustomBlockquote = ({ children }: { children: ReactNode }) => (
 const CustomList = ({ children, ordered }: { children: ReactNode; ordered?: boolean }) => {
   const ListTag = ordered ? 'ol' : 'ul';
   const classes = ordered 
-    ? "list-decimal list-inside mb-4 space-y-2 text-gray-700 dark:text-gray-300"
-    : "list-disc list-inside mb-4 space-y-2 text-gray-700 dark:text-gray-300";
+    ? "list-decimal list-outside mb-4 space-y-2 text-gray-700 dark:text-gray-300 ml-6"
+    : "list-disc list-outside mb-4 space-y-2 text-gray-700 dark:text-gray-300 ml-6";
   
   return <ListTag className={classes}>{children}</ListTag>;
 };
@@ -130,7 +130,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     blockquote: CustomBlockquote,
     ul: (props) => <CustomList {...props} />,
     ol: (props) => <CustomList ordered {...props} />,
-    li: ({ children }) => <li className="text-gray-700 dark:text-gray-300">{children}</li>,
+    li: ({ children }) => <li className="text-gray-700 dark:text-gray-300 pl-2">{children}</li>,
     a: CustomLink,
     table: CustomTable,
     thead: CustomTableHead,

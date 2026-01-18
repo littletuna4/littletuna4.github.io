@@ -40,10 +40,10 @@ export default function HeroSection() {
                 Reps
               </Link>
               <Link
-                href='/join'
+                href='/blog'
                 className='bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 rounded-lg font-semibold transition-colors text-center'
               >
-                Join {APP_CONSTS.APP_SHORTNAME}
+                Blog
               </Link>
             </div>
           </div>
