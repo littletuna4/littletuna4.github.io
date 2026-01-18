@@ -2,6 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Raleway } from 'next/font/google';
 import { ClientThemeProvider } from '@/components/providers/ClientThemeProvider';
+import { PostHogScript } from '@/components/PostHogScript';
 
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -65,6 +66,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${raleway.variable} antialiased`}>
+        <PostHogScript />
         <ClientThemeProvider defaultTheme='system'>
           <Header />
           <main>{children}</main>
