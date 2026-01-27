@@ -78,6 +78,17 @@ try {
   if (fs.existsSync(outDir)) {
     console.log(`📁 Copying to: ${outDir}`);
     copyDirectory(deploymentFilesDir, outDir);
+    
+    // Ensure .nojekyll exists (critical for GitHub Pages)
+    const nojekyllPath = path.join(outDir, '.nojekyll');
+    if (!fs.existsSync(nojekyllPath)) {
+      console.log(`⚠️  .nojekyll not found, creating it...`);
+      fs.writeFileSync(nojekyllPath, '');
+      console.log(`✓ Created .nojekyll file`);
+    } else {
+      console.log(`✓ .nojekyll file verified`);
+    }
+    
     console.log(`✅ Deployment files copied to out directory (required for GitHub Pages)`);
   } else {
     console.error(`✗ ERROR: out directory does not exist: ${outDir}`);
