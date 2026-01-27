@@ -113,6 +113,11 @@ export async function generateStaticParams(): Promise<
   }
 
   // Always return at least the root page - required for Next.js 15
+  // This ensures the route is always generated even if submodule isn't checked out
+  if (staticParams.length === 0) {
+    staticParams.push({ slug: [] });
+  }
+
   return staticParams;
 }
 
