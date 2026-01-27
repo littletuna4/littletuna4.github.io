@@ -33,12 +33,7 @@ export default function HeroSection() {
               >
                 Events
               </Link>
-              <Link
-                href='/reps'
-                className='text-primary hover:text-primary/80 px-8 py-4 font-semibold transition-colors text-center'
-              >
-                Reps
-              </Link>
+              
               <Link
                 href='/blog'
                 className='bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 rounded-lg font-semibold transition-colors text-center'

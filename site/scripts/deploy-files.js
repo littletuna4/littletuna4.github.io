@@ -1,24 +1,25 @@
 #!/usr/bin/env node
 
 /**
- * Deployment script to copy files from deployment_files to ../docs
+ * Deployment script to copy files from deployment_files to output directories
  * This script is OS/shell agnostic and handles file copying for static site deployment
+ * Copies to both ../docs (for manual deployment) and ./out (for GitHub Actions)
  */
 
 const fs = require('fs');
 const path = require('path');
-const { exec } = require('child_process');
-
-// Build the Next.js application
-exec('next build');
 
 // Get the directory paths
 const deploymentFilesDir = path.join(__dirname, '..', 'deployment_files');
 const docsDir = path.join(__dirname, '..', '..', 'docs');
+const outDir = path.join(__dirname, '..', 'out');
 
-// Ensure docs directory exists
+// Ensure output directories exist
 if (!fs.existsSync(docsDir)) {
   fs.mkdirSync(docsDir, { recursive: true });
+}
+if (!fs.existsSync(outDir)) {
+  fs.mkdirSync(outDir, { recursive: true });
 }
 
 // Function to copy a file
@@ -56,7 +57,6 @@ function copyDirectory(sourceDir, destDir) {
 // Main execution
 console.log('🚀 Starting deployment file copy...');
 console.log(`📁 Source: ${deploymentFilesDir}`);
-console.log(`📁 Destination: ${docsDir}`);
 
 // Check if deployment_files directory exists
 if (!fs.existsSync(deploymentFilesDir)) {
@@ -64,12 +64,32 @@ if (!fs.existsSync(deploymentFilesDir)) {
   process.exit(1);
 }
 
-// Copy all files from deployment_files to docs
+// Copy all files from deployment_files to both output directories
 try {
-  copyDirectory(deploymentFilesDir, docsDir);
+  // Copy to docs directory (for manual deployment)
+  if (fs.existsSync(docsDir)) {
+    console.log(`📁 Copying to: ${docsDir}`);
+    copyDirectory(deploymentFilesDir, docsDir);
+  } else {
+    console.log(`⚠️  Skipping docs directory (does not exist): ${docsDir}`);
+  }
+
+  // Copy to out directory (for GitHub Actions - CRITICAL)
+  if (fs.existsSync(outDir)) {
+    console.log(`📁 Copying to: ${outDir}`);
+    copyDirectory(deploymentFilesDir, outDir);
+    console.log(`✅ Deployment files copied to out directory (required for GitHub Pages)`);
+  } else {
+    console.error(`✗ ERROR: out directory does not exist: ${outDir}`);
+    console.error(`   This is required for GitHub Pages deployment!`);
+    console.error(`   Make sure 'next build' completed successfully before this script runs.`);
+    process.exit(1);
+  }
+
   console.log('✅ Deployment files copied successfully!');
   process.exit(0);  
 } catch (error) {
   console.error('✗ Error during deployment file copy:', error.message);
+  console.error(error.stack);
   process.exit(1);
 }

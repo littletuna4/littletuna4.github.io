@@ -53,6 +53,23 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      - name: Verify build output
+        run: |
+          if [ ! -f "out/.nojekyll" ]; then
+            echo "❌ ERROR: .nojekyll file not found in out directory!"
+            echo "This is required for GitHub Pages to serve Next.js static exports."
+            exit 1
+          fi
+          if [ ! -d "out/career-ledger" ]; then
+            echo "⚠️  WARNING: career-ledger directory not found in out directory"
+            echo "Career ledger pages may not be generated."
+          else
+            echo "✓ career-ledger directory found"
+            ls -la out/career-ledger/ | head -10
+          fi
+          echo "✓ Build output verified"
+          echo "✓ .nojekyll file present"
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
