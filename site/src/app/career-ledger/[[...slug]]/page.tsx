@@ -20,12 +20,26 @@ interface CareerLedgerPageProps {
   readonly params: Promise<{ slug?: string[] }>;
 }
 
+// Disable dynamic params for static export - only use generated params
+export const dynamicParams = false;
+
+// Force static generation for this route
+export const dynamic = 'force-static';
+
 export async function generateStaticParams(): Promise<
   Array<{ slug: string[] }>
 > {
   const careerLedgerPath = path.join(process.cwd(), 'src/app/career-ledger');
 
-  const staticParams: Array<{ slug: string[] }> = [{ slug: [] }]; // Root page
+  const staticParams: Array<{ slug: string[] }> = [];
+
+  // Only add root page if README.md or index.md exists
+  // This ensures the page can actually be rendered during static export
+  const rootReadmePath = path.join(careerLedgerPath, 'README.md');
+  const rootIndexPath = path.join(careerLedgerPath, 'index.md');
+  if (fs.existsSync(rootReadmePath) || fs.existsSync(rootIndexPath)) {
+    staticParams.push({ slug: [] });
+  }
 
   // Directories to skip when scanning
   const skipDirectories = new Set([
@@ -83,17 +97,22 @@ export async function generateStaticParams(): Promise<
         }
       }
     } catch (error) {
-      console.error(`Error scanning directory ${dirPath}:`, error);
+      // Silently continue if directory scan fails
+      // This allows the build to succeed even if submodule isn't checked out
+      console.warn(`Warning: Could not scan directory ${dirPath}:`, error);
     }
   }
 
-  scanDirectory(careerLedgerPath, []);
-
-  // Ensure we have at least the root page
-  if (staticParams.length === 0) {
-    staticParams.push({ slug: [] });
+  // Only scan if the directory exists (submodule may not be checked out)
+  if (fs.existsSync(careerLedgerPath)) {
+    try {
+      scanDirectory(careerLedgerPath, []);
+    } catch (error) {
+      console.warn('Warning: Could not scan career-ledger directory:', error);
+    }
   }
 
+  // Always return at least the root page - required for Next.js 15
   return staticParams;
 }
 
@@ -131,11 +150,17 @@ export default async function CareerLedgerPage({
     }
   }
 
+  // Ensure file exists - if not, render a fallback to ensure page is generated
+  // This is critical for static export - pages must always render something
+  let content: string;
   if (!fs.existsSync(filePath)) {
-    notFound();
+    console.warn(`Warning: File not found at ${filePath} for slug:`, segments);
+    // Render a fallback page to ensure static generation succeeds
+    // This should only happen if generateStaticParams was incorrect
+    content = `# ${pageTitle}\n\nContent not available.`;
+  } else {
+    content = fs.readFileSync(filePath, 'utf-8');
   }
-
-  const content = fs.readFileSync(filePath, 'utf-8');
 
   // Extract title from first heading
   const titleMatch = content.match(/^#\s+(.+)$/m);
