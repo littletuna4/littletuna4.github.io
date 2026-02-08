@@ -2,6 +2,18 @@
 
 Custom components available in all blog and MDX content via `useMDXComponents` (see `src/mdx-components.tsx`). Styling follows THEME_SYSTEM.md.
 
+## Tables
+
+GitHub Flavored Markdown (GFM) table syntax is supported via `remark-gfm` (see `next.config.ts`). Tables are parsed from standard markdown and rendered with custom table components in `mdx-components.tsx` (CustomTable, thead, tbody, tr, th, td) for borders, header styling, and horizontal scroll on small screens.
+
+Use standard GFM table syntax in MDX:
+
+```md
+| Column A | Column B |
+| -------- | -------- |
+| Cell 1   | Cell 2   |
+```
+
 ## ExpandableSection
 
 Collapsible section using native `<details>` / `<summary>`. Supports arbitrary nesting.

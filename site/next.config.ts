@@ -1,5 +1,6 @@
 import type { NextConfig } from 'next';
 import createMDX from '@next/mdx';
+import remarkGfm from 'remark-gfm';
 
 const nextConfig: NextConfig = {
   // Enable static export for static site hosting
@@ -47,7 +48,7 @@ const nextConfig: NextConfig = {
 };
 
 const withMDX = createMDX({
-  // Add markdown plugins here, as desired
+  remarkPlugins: [remarkGfm],
 });
 
 // Merge MDX config with Next.js config
