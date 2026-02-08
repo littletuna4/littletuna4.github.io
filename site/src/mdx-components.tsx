@@ -1,5 +1,6 @@
 import type { MDXComponents } from 'mdx/types';
 import React, { ReactNode } from 'react';
+import { ExpandableSection } from '@/components/ui/ExpandableSection';
 
 // Custom components for MDX
 const CustomHeading = ({ 
@@ -139,6 +140,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     th: (props) => <CustomTableCell isHeader {...props} />,
     td: CustomTableCell,
     hr: () => <hr className="my-8 border-gray-300 dark:border-gray-600" />,
+    ExpandableSection,
     img: ({ src, alt, ...props }) => (
       <img 
         src={src} 
