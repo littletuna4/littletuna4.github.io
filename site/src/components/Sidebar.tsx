@@ -138,12 +138,6 @@ export default function Sidebar({
                 </span>
               </Link>
             )}
-            <div className={`flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2 md:min-h-[40px] ${isDesktopCollapsed ? 'md:justify-center md:gap-0 md:px-2' : ''}`}>
-              <SimpleThemeToggle />
-              <span className={`text-sm text-foreground-muted whitespace-nowrap overflow-hidden transition-[opacity,max-width] duration-200 ease-out md:duration-200 md:ease-out ${isDesktopCollapsed ? 'md:max-w-0 md:opacity-0 md:pointer-events-none' : 'md:max-w-[5rem]'}`}>
-                Theme
-              </span>
-            </div>
             <Link
               href={`mailto:${APP_CONSTS.APP_CONTACT_EMAIL}`}
               title={isDesktopCollapsed ? 'Contact' : undefined}
@@ -155,6 +149,12 @@ export default function Sidebar({
                 Contact
               </span>
             </Link>
+            <div className={`flex min-h-[30px] items-center gap-2 rounded-lg px-3 md:min-h-[25px] ${isDesktopCollapsed ? 'md:justify-center md:gap-0 md:px-2' : ''}`}>
+              <SimpleThemeToggle />
+              <span className={`text-sm text-foreground-muted whitespace-nowrap overflow-hidden transition-[opacity,max-width] duration-200 ease-out md:duration-200 md:ease-out ${isDesktopCollapsed ? 'md:max-w-0 md:opacity-0 md:pointer-events-none' : 'md:max-w-[5rem]'}`}>
+                Theme
+              </span>
+            </div>
           </div>
         </div>
       </aside>
