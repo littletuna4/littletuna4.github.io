@@ -1,3 +1,7 @@
+# Builds the Next.js static site from ./site and deploys it to GitHub Pages.
+# Required: In repo Settings → Pages → Build and deployment → Source must be
+# "GitHub Actions". If set to "Deploy from a branch", the repo root (e.g. README.md)
+# is served instead of this workflow's artifact.
 name: Build and Deploy to GitHub Pages
 
 on:
@@ -23,10 +27,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
           
-
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
         with:
@@ -42,13 +43,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Verify submodules
-        run: |
-          if [ ! -f "src/app/career-ledger/README.md" ]; then
-            echo "Error: career-ledger submodule not checked out"
-            exit 1
-          fi
-          echo "✓ Submodules verified"
 
       - name: Build
         run: pnpm run build
