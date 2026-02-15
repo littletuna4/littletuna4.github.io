@@ -10,7 +10,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from './breadcrumb';
-import { APP_CONSTS } from '@/db/app';
+import { blog, events, root } from '@/lib/routes';
 
 interface BreadcrumbItem {
   label: string;
@@ -22,11 +22,10 @@ interface MetadataBreadcrumbProps {
   className?: string;
 }
 
-// Default breadcrumb mappings for common routes
+// Default breadcrumb mappings for common routes (hrefs from routes.ts)
 const defaultBreadcrumbs: Record<string, BreadcrumbItem[]> = {
-  '/partners': [{ label: 'Home', href: '/' }, { label: 'Partners' }],
-  '/events': [{ label: 'Home', href: '/' }, { label: 'Events' }],
-  '/blog': [{ label: 'Home', href: '/' }, { label: 'Blog' }],
+  '/events': [{ label: 'Home', href: root() }, { label: 'Events', href: events() }],
+  '/blog': [{ label: 'Home', href: root() }, { label: 'Blog', href: blog() }],
 };
 
 export function MetadataBreadcrumb({
@@ -76,7 +75,7 @@ function generateBreadcrumbsFromPath(pathname: string): BreadcrumbItem[] {
 
   // Handle dynamic routes
   const pathSegments = pathname.split('/').filter(Boolean);
-  const breadcrumbs: BreadcrumbItem[] = [{ label: 'Home', href: '/' }];
+  const breadcrumbs: BreadcrumbItem[] = [{ label: 'Home', href: root() }];
 
   let currentPath = '';
 
@@ -89,13 +88,11 @@ function generateBreadcrumbsFromPath(pathname: string): BreadcrumbItem[] {
       continue;
     }
 
-    // Handle known route patterns
-    if (segment === 'sponsors') {
-      breadcrumbs.push({ label: 'Sponsors', href: currentPath });
-    } else if (segment === 'events') {
-      breadcrumbs.push({ label: 'Events', href: currentPath });
+    // Handle known route patterns (use route builders where available)
+    if (segment === 'events') {
+      breadcrumbs.push({ label: 'Events', href: events() });
     } else if (segment === 'blog') {
-      breadcrumbs.push({ label: 'Blog', href: currentPath });
+      breadcrumbs.push({ label: 'Blog', href: blog() });
     } else {
       // For dynamic segments, we'll need to get the actual name
       // This would typically come from the page's metadata or props

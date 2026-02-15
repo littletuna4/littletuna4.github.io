@@ -4,8 +4,7 @@ import { Raleway } from 'next/font/google';
 import { ClientThemeProvider } from '@/components/providers/ClientThemeProvider';
 import { PostHogScript } from '@/components/PostHogScript';
 
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+import LayoutShell from '@/components/LayoutShell';
 import { APP_CONSTS } from '@/data/app';
 
 const raleway = Raleway({
@@ -68,9 +67,7 @@ export default function RootLayout({
       <body className={`${raleway.variable} antialiased`}>
         <PostHogScript />
         <ClientThemeProvider defaultTheme='system'>
-          <Header />
-          <main>{children}</main>
-          <Footer />
+          <LayoutShell>{children}</LayoutShell>
         </ClientThemeProvider>
       </body>
     </html>

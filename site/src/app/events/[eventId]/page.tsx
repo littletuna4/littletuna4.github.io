@@ -33,6 +33,7 @@ import {
   RsvpResponse,
   DINNER_PARTY_CONFIG,
 } from '@/lib/dinner-parties/google-sheets-client';
+import { events, root } from '@/lib/routes';
 
 interface EventPageProps {
   readonly params: Promise<{ eventId: string }>;
@@ -145,8 +146,8 @@ export default async function DinnerPartyEventPage({
         <div className='mb-8'>
           <MetadataBreadcrumb
             items={[
-              { label: 'Home', href: '/' },
-              { label: 'Events', href: '/events' },
+              { label: 'Home', href: root() },
+              { label: 'Events', href: events() },
               { label: event.theme || 'Dinner Party' },
             ]}
           />
@@ -154,7 +155,7 @@ export default async function DinnerPartyEventPage({
 
         {/* Back Link */}
         <Link
-          href='/events'
+          href={events()}
           className='inline-flex items-center text-foreground-tertiary hover:text-foreground transition-colors mb-8'
         >
           <ChevronLeft className='w-4 h-4 mr-1' aria-hidden='true' />

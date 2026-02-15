@@ -62,13 +62,12 @@ export const professions = [
  * TypewriterAnimation Component
  *
  * Functional Requirements:
- * - Display a typing animation that cycles through the professions array
- * - Type out each profession character by character
- * - Delete each profession character by character before moving to the next
- * - Loop infinitely through all professions
- * - Provide smooth typing and deleting animations with configurable speeds
- * - Be fully responsive and accessible
- * - Support customizable styling through className prop
+ * - Display a typing animation that cycles through a phrase list (default: professions array, or optional phrases prop).
+ * - Type out each phrase character by character; delete character by character before moving to the next.
+ * - Loop infinitely through all phrases.
+ * - Provide smooth typing and deleting animations with configurable speeds.
+ * - Support optional prefix/suffix around the animated text.
+ * - Be fully responsive and accessible; support customizable styling via className.
  */
 
 interface TypewriterAnimationProps {
@@ -78,6 +77,8 @@ interface TypewriterAnimationProps {
   pauseDuration?: number;
   prefix?: string;
   suffix?: string;
+  /** When provided, cycles through these phrases instead of the default professions list. */
+  phrases?: string[];
 }
 
 export default function TypewriterAnimation({
@@ -87,14 +88,16 @@ export default function TypewriterAnimation({
   pauseDuration = 2000,
   prefix = 'for ',
   suffix = '',
+  phrases,
 }: TypewriterAnimationProps) {
+  const wordList = phrases ?? professions;
   const [currentProfessionIndex, setCurrentProfessionIndex] = useState(0);
   const [currentText, setCurrentText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
-    const currentProfession = professions[currentProfessionIndex];
+    const currentProfession = wordList[currentProfessionIndex];
 
     if (isPaused) {
       const pauseTimer = setTimeout(() => {
@@ -122,7 +125,7 @@ export default function TypewriterAnimation({
             // Finished deleting, move to next profession
             setIsDeleting(false);
             setCurrentProfessionIndex(
-              prevIndex => (prevIndex + 1) % professions.length
+              prevIndex => (prevIndex + 1) % wordList.length
             );
           }
         }
@@ -136,6 +139,7 @@ export default function TypewriterAnimation({
     isDeleting,
     isPaused,
     currentProfessionIndex,
+    wordList,
     typingSpeed,
     deletingSpeed,
     pauseDuration,

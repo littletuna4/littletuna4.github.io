@@ -9,6 +9,7 @@
 
 import Link from 'next/link';
 import { Calendar, ChevronLeft } from 'lucide-react';
+import { events } from '@/lib/routes';
 
 export default function EventNotFound(): React.JSX.Element {
   return (
@@ -26,7 +27,7 @@ export default function EventNotFound(): React.JSX.Element {
           events page for upcoming dinners.
         </p>
         <Link
-          href='/events'
+          href={events()}
           className='
             inline-flex items-center gap-2
             bg-primary hover:bg-primary/90 text-primary-foreground

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { blog_slug } from '@/lib/routes';
 import { getAllHighlightedBlogPosts, type HighlightedBlogPost } from '@/app/blog/highlightedblogs';
 
 /**
@@ -59,7 +60,7 @@ export default function BlogSection() {
                   ))}
                 </div>
                 <Link 
-                  href={`/blog/${post.slug}`} 
+                  href={blog_slug({ slug: post.slug })} 
                   className="text-primary hover:text-primary/80 font-semibold text-sm transition-colors inline-flex items-center gap-1"
                 >
                   Read More 

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { blog_slug } from '@/lib/routes';
 import Image from 'next/image';
 import { PostListItem } from '@/app/blog/_types';
 import { ChevronDown } from 'lucide-react';
@@ -125,7 +126,7 @@ export default function BlogPostsList({ posts }: BlogPostsListProps) {
                   </div>
                 )}
                 <Link 
-                  href={`/blog/${post.slug}`} 
+                  href={blog_slug({ slug: post.slug })} 
                   className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-semibold text-sm transition-colors inline-flex items-center gap-1 mt-auto"
                 >
                   Read More 

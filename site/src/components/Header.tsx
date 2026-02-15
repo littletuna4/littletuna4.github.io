@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Phone } from 'lucide-react';
+import { root } from '@/lib/routes';
 import { SimpleThemeToggle } from '@/components/ui/SimpleThemeToggle';
 import { APP_CONSTS } from '@/data/app';
 
@@ -13,7 +14,7 @@ export default function Header() {
         <div className='flex items-center justify-between'>
           <div className='flex items-center'>
             <Link
-              href='/'
+              href={root()}
               className='flex items-center gap-3 text-2xl font-bold'
             >
               <Image

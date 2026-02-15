@@ -12,6 +12,7 @@
 import { Metadata } from 'next';
 import { MetadataBreadcrumb } from '@/components/ui/metadata-breadcrumb';
 import BlogPostsList from '@/components/BlogPostsList';
+import { blog, root } from '@/lib/routes';
 import { AllPosts } from './post_index';
 import { PostListItem } from './_types';
 
@@ -31,7 +32,7 @@ export default function BlogPage() {
         <div className="mb-6">
           <MetadataBreadcrumb 
             items={[
-              { label: 'Home', href: '/' },
+              { label: 'Home', href: root() },
               { label: 'Blog' }
             ]}
           />

@@ -5,130 +5,134 @@
 
 @layer base {
   :root {
-    /* Light mode colors - Navy-Green Theme with Pink Highlights */
-    --background: 210 25% 97%; /* Light navy-tinted white */
-    --background-secondary: 210 20% 95%; /* Lighter navy-tinted */
-    --background-tertiary: 210 15% 92%; /* Very light navy-tinted */
-    --background-muted: 210 12% 90%; /* Muted navy-tinted */
+    /* Light mode - Navy, light grey-blue, pink accents */
+    --background: 214 32% 96%; /* Light grey-blue */
+    --background-secondary: 214 28% 93%; /* Slightly deeper grey-blue */
+    --background-tertiary: 214 24% 90%; /* Grey-blue */
+    --background-muted: 214 20% 88%; /* Muted grey-blue */
 
-    --foreground: 215 50% 12%; /* Deep navy blue */
-    --foreground-secondary: 215 40% 18%; /* Medium navy blue */
-    --foreground-tertiary: 215 35% 32%; /* Muted navy blue */
-    --foreground-muted: 215 30% 45%; /* Light navy blue */
+    --foreground: 218 45% 14%; /* Navy text */
+    --foreground-secondary: 218 40% 22%; /* Navy secondary */
+    --foreground-tertiary: 218 35% 35%; /* Navy tertiary */
+    --foreground-muted: 218 30% 48%; /* Navy muted */
 
-    /* Primary colors - Navy Blue */
-    --primary: 215 50% 25%; /* Rich navy blue */
-    --primary-foreground: 210 25% 97%; /* Light navy-tinted white */
-    --primary-50: 210 30% 92%; /* Very light navy */
-    --primary-100: 210 28% 85%; /* Light navy */
-    --primary-200: 210 25% 75%; /* Medium-light navy */
-    --primary-300: 210 22% 65%; /* Medium navy */
-    --primary-400: 210 30% 45%; /* Navy blue */
-    --primary-500: 215 50% 25%; /* Rich navy blue */
-    --primary-600: 215 55% 20%; /* Dark navy blue */
-    --primary-700: 215 60% 15%; /* Very dark navy */
-    --primary-800: 215 65% 10%; /* Deep navy */
-    --primary-900: 215 70% 5%; /* Darkest navy */
+    /* Primary - Navy */
+    --primary: 218 50% 28%; /* Navy */
+    --primary-foreground: 214 32% 97%; /* Light grey-blue on navy */
+    --primary-50: 214 35% 93%; /* Very light grey-blue */
+    --primary-100: 214 32% 88%; /* Light grey-blue */
+    --primary-200: 214 28% 78%; /* Grey-blue */
+    --primary-300: 218 30% 60%; /* Medium grey-blue */
+    --primary-400: 218 45% 40%; /* Navy mid */
+    --primary-500: 218 50% 28%; /* Navy */
+    --primary-600: 218 55% 22%; /* Dark navy */
+    --primary-700: 218 60% 16%; /* Deeper navy */
+    --primary-800: 218 65% 12%; /* Deep navy */
+    --primary-900: 218 70% 8%; /* Darkest navy */
 
-    /* Secondary colors - Navy-Teal Green */
-    --secondary: 180 33% 27%; /* Navy-teal green */
-    --secondary-foreground: 210 25% 97%; /* Light navy-tinted white */
+    /* Secondary - Navy (slightly different tone) */
+    --secondary: 218 45% 22%; /* Dark navy */
+    --secondary-foreground: 214 32% 97%; /* Light grey-blue */
 
-    /* Accent colors - Pink Highlight */
-    --accent: 330 80% 60%; /* Pink highlight */
-    --accent-foreground: 210 25% 97%; /* Light navy-tinted white */
+    /* Accent - Pink */
+    --accent: 330 75% 58%; /* Pink accent */
+    --accent-foreground: 218 45% 14%; /* Navy on pink */
 
-    /* Semantic colors - Navy-Green Theme */
-    --destructive: 0 72% 51%; /* Red for errors */
-    --destructive-foreground: 210 25% 97%; /* Light navy-tinted white */
+    /* Semantic */
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 214 32% 97%;
 
-    --success: 161 90% 20%; /* Teal-green for success */
-    --success-foreground: 210 25% 97%; /* Light navy-tinted white */
+    --success: 161 90% 22%;
+    --success-foreground: 214 32% 97%;
 
-    --warning: 37 93% 44%; /* Amber for warnings */
-    --warning-foreground: 215 50% 12%; /* Deep navy blue */
+    --warning: 37 93% 44%;
+    --warning-foreground: 218 45% 14%;
 
-    --info: 199 97% 40%; /* Cyan-blue for info */
-    --info-foreground: 210 25% 97%; /* Light navy-tinted white */
+    --info: 214 70% 45%;
+    --info-foreground: 214 32% 97%;
 
-    /* UI elements - Navy-Green Theme */
-    --border: 210 20% 80%; /* Light navy border */
-    --input: 210 20% 80%; /* Light navy input */
-    --ring: 215 50% 25%; /* Rich navy blue ring */
+    /* UI - light grey-blue borders */
+    --border: 214 22% 82%;
+    --input: 214 22% 82%;
+    --ring: 218 50% 28%;
 
-    --card: 210 25% 97%; /* Light navy-tinted white card */
-    --card-foreground: 215 50% 12%; /* Deep navy blue */
+    --card: 214 32% 96%;
+    --card-foreground: 218 45% 14%;
 
-    --popover: 210 25% 97%; /* Light navy-tinted white popover */
-    --popover-foreground: 215 50% 12%; /* Deep navy blue */
+    --popover: 214 32% 96%;
+    --popover-foreground: 218 45% 14%;
 
-    --muted: 210 15% 88%; /* Muted navy */
-    --muted-foreground: 215 35% 35%; /* Muted navy text */
+    --muted: 214 20% 88%;
+    --muted-foreground: 218 35% 42%;
 
     /* Border radius */
     --radius: 0.5rem;
+
+    /* Sidebar layout */
+    --sidebar-width: 16rem;
+    --sidebar-collapsed-width: 5rem;
   }
 
   .dark {
-    /* Dark mode colors - Navy-Green Theme with Pink Highlights */
-    --background: 215 50% 12%; /* Deep navy blue */
-    --background-secondary: 215 45% 8%; /* Darker navy blue */
-    --background-tertiary: 215 40% 12%; /* Medium dark navy */
-    --background-muted: 215 35% 16%; /* Muted dark navy */
+    /* Dark mode - Navy, light grey-blue, pink accents */
+    --background: 218 45% 10%; /* Navy background */
+    --background-secondary: 218 42% 8%; /* Darker navy */
+    --background-tertiary: 218 38% 12%; /* Navy tertiary */
+    --background-muted: 218 35% 16%; /* Muted navy */
 
-    --foreground: 200 90% 95%; /* Light cyan-tinted white */
-    --foreground-secondary: 200 85% 85%; /* Medium cyan-tinted */
-    --foreground-tertiary: 200 80% 75%; /* Muted cyan-tinted */
-    --foreground-muted: 200 75% 65%; /* Light cyan-tinted */
+    --foreground: 214 30% 92%; /* Light grey-blue text */
+    --foreground-secondary: 214 28% 82%; /* Grey-blue secondary */
+    --foreground-tertiary: 214 25% 70%; /* Grey-blue tertiary */
+    --foreground-muted: 214 22% 58%; /* Grey-blue muted */
 
-    /* Primary colors - Navy Blue with Teal Tint (Dark Mode) */
-    --primary: 210 75% 59%; /* Medium blue with teal tint */
-    --primary-foreground: 215 50% 12%; /* Deep navy blue */
-    --primary-50: 215 50% 12%; /* Deep navy */
-    --primary-100: 215 45% 15%; /* Dark navy */
-    --primary-200: 215 40% 20%; /* Medium dark navy */
-    --primary-300: 215 45% 30%; /* Medium navy */
-    --primary-400: 210 70% 45%; /* Navy blue */
-    --primary-500: 210 75% 59%; /* Medium blue with teal tint */
-    --primary-600: 210 80% 65%; /* Light blue with teal tint */
-    --primary-700: 210 85% 75%; /* Lighter blue with teal tint */
-    --primary-800: 210 90% 85%; /* Light blue with teal tint */
-    --primary-900: 210 95% 95%; /* Very light blue with teal tint */
+    /* Primary - Navy (slightly lighter for dark mode contrast) */
+    --primary: 218 50% 35%; /* Navy primary */
+    --primary-foreground: 214 30% 95%; /* Light grey-blue on navy */
+    --primary-50: 218 45% 10%; /* Dark navy */
+    --primary-100: 218 45% 14%; /* Navy */
+    --primary-200: 218 42% 20%; /* Navy */
+    --primary-300: 218 45% 30%; /* Navy mid */
+    --primary-400: 218 50% 42%; /* Navy */
+    --primary-500: 218 50% 35%; /* Navy */
+    --primary-600: 218 55% 48%; /* Lighter navy */
+    --primary-700: 218 50% 60%; /* Grey-blue */
+    --primary-800: 214 35% 78%; /* Light grey-blue */
+    --primary-900: 214 30% 92%; /* Light grey-blue */
 
-    /* Secondary colors - Dark Navy (Dark Mode) */
-    --secondary: 215 50% 25%; /* Dark navy blue */
-    --secondary-foreground: 200 90% 95%; /* Light cyan-tinted white */
+    /* Secondary - Navy */
+    --secondary: 218 40% 20%; /* Dark navy */
+    --secondary-foreground: 214 30% 92%; /* Light grey-blue */
 
-    /* Accent colors - Bright Pink Highlight (Dark Mode) */
-    --accent: 330 80% 70%; /* Bright pink highlight */
-    --accent-foreground: 215 50% 12%; /* Deep navy blue */
+    /* Accent - Pink (brighter for dark) */
+    --accent: 330 78% 65%; /* Pink accent */
+    --accent-foreground: 218 45% 10%; /* Navy on pink */
 
-    /* Semantic colors - Navy-Green Theme (Dark Mode) */
-    --destructive: 0 84% 60%; /* Light red for errors */
-    --destructive-foreground: 200 90% 95%; /* Light cyan-tinted white */
+    /* Semantic */
+    --destructive: 0 84% 58%;
+    --destructive-foreground: 214 30% 95%;
 
-    --success: 161 84% 39%; /* Bright teal-green for success */
-    --success-foreground: 215 50% 12%; /* Deep navy blue */
+    --success: 161 84% 38%;
+    --success-foreground: 218 45% 10%;
 
-    --warning: 38 92% 50%; /* Bright amber for warnings */
-    --warning-foreground: 215 50% 12%; /* Deep navy blue */
+    --warning: 38 92% 50%;
+    --warning-foreground: 218 45% 10%;
 
-    --info: 188 95% 43%; /* Bright cyan for info */
-    --info-foreground: 215 50% 12%; /* Deep navy blue */
+    --info: 214 70% 52%;
+    --info-foreground: 218 45% 10%;
 
-    /* UI elements - Navy-Green Theme (Dark Mode) */
-    --border: 215 35% 16%; /* Dark navy border */
-    --input: 215 35% 16%; /* Dark navy input */
-    --ring: 210 75% 59%; /* Medium blue with teal tint ring */
+    /* UI - navy borders */
+    --border: 218 35% 18%;
+    --input: 218 35% 18%;
+    --ring: 218 50% 35%;
 
-    --card: 215 50% 12%; /* Deep navy blue card */
-    --card-foreground: 200 90% 95%; /* Light cyan-tinted white */
+    --card: 218 45% 10%;
+    --card-foreground: 214 30% 92%;
 
-    --popover: 215 50% 12%; /* Deep navy blue popover */
-    --popover-foreground: 200 90% 95%; /* Light cyan-tinted white */
+    --popover: 218 45% 10%;
+    --popover-foreground: 214 30% 92%;
 
-    --muted: 215 35% 16%; /* Muted dark navy */
-    --muted-foreground: 200 80% 75%; /* Muted cyan-tinted text */
+    --muted: 218 35% 16%;
+    --muted-foreground: 214 25% 62%;
   }
 }
 
@@ -194,31 +198,29 @@
 }
 
 @layer base {
-  /* Prevent flash of unstyled content */
+  /* Prevent flash of unstyled content - navy, light grey-blue, pink accents */
   html {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
-    /* Fallback for when CSS variables aren't loaded yet - Navy-Green Theme with Pink Highlights */
-    background-color: #f0f4f8;
-    color: #0a1829;
+    background-color: #e8eef4;
+    color: #141d2b;
   }
 
   html.dark {
-    background-color: #0a1829;
-    color: #e0f2fe;
+    background-color: #0f1620;
+    color: #dce4ec;
   }
 
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
-    /* Fallback for when CSS variables aren't loaded yet - Navy-Green Theme with Pink Highlights */
-    background-color: #f0f4f8;
-    color: #0a1829;
+    background-color: #e8eef4;
+    color: #141d2b;
   }
 
   .dark body {
-    background-color: #0a1829;
-    color: #e0f2fe;
+    background-color: #0f1620;
+    color: #dce4ec;
   }
 
   * {

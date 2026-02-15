@@ -20,6 +20,7 @@ import {
   DinnerPartyEvent,
   DINNER_PARTY_CONFIG,
 } from '@/lib/dinner-parties/google-sheets-client';
+import { events_eventId } from '@/lib/routes';
 
 export const metadata: Metadata = {
   title: 'Dinner Parties | 2026 Potluck Series',
@@ -46,7 +47,7 @@ function EventCard({
 
   return (
     <Link
-      href={`/events/${event.eventId}`}
+      href={events_eventId({ eventId: event.eventId })}
       className={`
         group
         bg-card border border-border rounded-2xl p-6

@@ -14,6 +14,7 @@
 import { Metadata } from 'next';
 import { ExternalLink } from 'lucide-react';
 import { MetadataBreadcrumb } from '@/components/ui/metadata-breadcrumb';
+import { root } from '@/lib/routes';
 
 export const metadata: Metadata = {
   title: 'Service Index',
@@ -47,7 +48,7 @@ export default function ServicesPage(): React.JSX.Element {
         {/* Breadcrumb */}
         <div className='mb-8'>
           <MetadataBreadcrumb
-            items={[{ label: 'Home', href: '/' }, { label: 'Services' }]}
+            items={[{ label: 'Home', href: root() }, { label: 'Services' }]}
           />
         </div>
 
@@ -57,7 +58,7 @@ export default function ServicesPage(): React.JSX.Element {
             Service Index
           </h1>
           <p className='text-lg sm:text-xl text-foreground-secondary max-w-2xl mx-auto'>
-            Some links I don't want to remember
+            Some links I don't want to remember (I use this as my browser homepage)
           </p>
         </div>
 

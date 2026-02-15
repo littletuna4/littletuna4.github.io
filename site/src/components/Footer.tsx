@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Mail, Phone, MapPin } from 'lucide-react';
+import { blog, root } from '@/lib/routes';
 import { SimpleThemeToggle } from '@/components/ui/SimpleThemeToggle';
 import { LinkedInIcon, FacebookIcon } from '@/components';
 import { APP_CONSTS } from '@/data/app';
@@ -54,7 +55,7 @@ export default function Footer() {
                   href={APP_CONSTS.APP_LINKEDIN}
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='text-foFreground-secondary hover:text-foreground transition-colors flex items-center gap-2'
+                  className='text-foreground-secondary hover:text-foreground transition-colors flex items-center gap-2'
                   aria-label='LinkedIn page'
                 >
                   <LinkedInIcon size={20} color='current' className='h-5 w-5' />{' '}
@@ -80,25 +81,13 @@ export default function Footer() {
             </h3>
             <div className='space-y-2'>
               <Link
-                href='/resume'
-                className='block text-foreground-secondary hover:text-foreground transition-colors'
-              >
-                Resume
-              </Link>
-              <Link
-                href='/projects'
-                className='block text-foreground-secondary hover:text-foreground transition-colors'
-              >
-                Projects
-              </Link>
-              <Link
-                href='/blog'
+                href={blog()}
                 className='block text-foreground-secondary hover:text-foreground transition-colors'
               >
                 Blog
               </Link>
               {/* <Link
-                href='/#services'
+                href={`${root()}#services`}
                 className='block text-foreground-secondary hover:text-foreground transition-colors'
               >
                 Services
@@ -109,7 +98,7 @@ export default function Footer() {
 
         <div className='border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center'>
           <div className='text-foreground-muted text-sm mb-4 md:mb-0'>
-            © Copyright 2025 {APP_CONSTS.APP_NAME}
+            © Copyright {new Date().getFullYear()} {APP_CONSTS.APP_NAME}
             <br />
             {APP_CONSTS?.APP_ABN && `ABN: ${APP_CONSTS.APP_ABN}`}
           </div>

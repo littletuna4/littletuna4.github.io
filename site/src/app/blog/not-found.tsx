@@ -10,6 +10,7 @@
 
 import Link from 'next/link';
 import BlogSection from '@/components/BlogSection';
+import { blog, root } from '@/lib/routes';
 
 export default function BlogNotFoundPage() {
   return (
@@ -31,13 +32,13 @@ export default function BlogNotFoundPage() {
           {/* Navigation Links */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link 
-              href="/"
+              href={root()}
               className="inline-flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary/90 transition-colors"
             >
               ← Back to Home
             </Link>
             <Link 
-              href="/blog"
+              href={blog()}
               className="inline-flex items-center px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
               View All Posts

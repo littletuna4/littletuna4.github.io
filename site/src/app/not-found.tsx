@@ -19,10 +19,10 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { blog, root } from '@/lib/routes';
 import {
   Home,
   BookOpen,
-  Briefcase,
   Link as LinkIcon,
   Search,
   ArrowLeft,
@@ -95,7 +95,7 @@ export default function PersonalSiteNotFoundPage(): React.JSX.Element {
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto'>
               {/* Home */}
               <Link
-                href='/'
+                href={root()}
                 className='group p-6 bg-background-secondary hover:bg-background-tertiary border border-border rounded-lg transition-all duration-200 hover:shadow-md hover:-translate-y-1'
               >
                 <div className='mb-3 flex justify-center'>
@@ -115,7 +115,7 @@ export default function PersonalSiteNotFoundPage(): React.JSX.Element {
 
               {/* Blog */}
               <Link
-                href='/blog'
+                href={blog()}
                 className='group p-6 bg-background-secondary hover:bg-background-tertiary border border-border rounded-lg transition-all duration-200 hover:shadow-md hover:-translate-y-1'
               >
                 <div className='mb-3 flex justify-center'>
@@ -133,29 +133,9 @@ export default function PersonalSiteNotFoundPage(): React.JSX.Element {
                 </p>
               </Link>
 
-              {/* Career Ledger */}
-              <Link
-                href='/career-ledger'
-                className='group p-6 bg-background-secondary hover:bg-background-tertiary border border-border rounded-lg transition-all duration-200 hover:shadow-md hover:-translate-y-1'
-              >
-                <div className='mb-3 flex justify-center'>
-                  <Briefcase
-                    className='w-8 h-8 text-primary group-hover:text-accent transition-colors'
-                    strokeWidth={1.5}
-                    aria-hidden='true'
-                  />
-                </div>
-                <h3 className='font-semibold text-foreground mb-2 group-hover:text-primary transition-colors'>
-                  Career Ledger
-                </h3>
-                <p className='text-sm text-foreground-secondary'>
-                  My professional journey
-                </p>
-              </Link>
-
               {/* Links */}
               <Link
-                href='/#links'
+                href={`${root()}#links`}
                 className='group p-6 bg-background-secondary hover:bg-background-tertiary border border-border rounded-lg transition-all duration-200 hover:shadow-md hover:-translate-y-1'
               >
                 <div className='mb-3 flex justify-center'>
@@ -178,7 +158,7 @@ export default function PersonalSiteNotFoundPage(): React.JSX.Element {
           {/* Primary Action Button */}
           <div className='mb-8'>
             <Link
-              href='/'
+              href={root()}
               className='inline-flex items-center px-8 py-4 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5'
             >
               <ArrowLeft className='w-5 h-5 mr-2' aria-hidden='true' />
