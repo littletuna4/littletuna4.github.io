@@ -39,6 +39,10 @@ const services: readonly ServiceLink[] = [
     label: 'noVNC (tonovnc)',
     link: 'https://tonovnc-1040520853607.australia-southeast2.run.app/vnc.html',
   },
+  {
+    label: 'cold_draw',
+    link: 'https://obsidian-utils-1040520853607.australia-southeast1.run.app',
+  }
 ] as const;
 
 export default function ServicesPage(): React.JSX.Element {
