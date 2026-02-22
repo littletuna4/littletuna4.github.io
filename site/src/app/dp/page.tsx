@@ -23,7 +23,7 @@ function DpPageContent(): React.ReactElement {
 
   const url = new URL(COLD_DRAW_APP_URL);
   if (eventId && inviteToken) {
-    url.pathname = `/invite/${eventId}/${inviteToken}`;
+    url.pathname = `/invite/${inviteToken}`;
   }
 
   return (
