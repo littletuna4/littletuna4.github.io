@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { blog, events } from '@/lib/routes';
+import { blog, events, dp } from '@/lib/routes';
 import { TypewriterAnimation } from '@/components';
 import { APP_CONSTS } from '@/data/app';
 
@@ -43,10 +43,10 @@ export default function HeroSection() {
             </p>
             <div className='flex flex-col sm:flex-row gap-4'>
               <Link
-                href={events()}
+                href={dp()}
                 className='text-primary hover:text-primary/80 px-8 py-4 font-semibold transition-colors text-center'
               >
-                Events
+                Dinner Parties
               </Link>
               
               <Link
