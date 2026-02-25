@@ -10,7 +10,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from './breadcrumb';
-import { blog, events, root } from '@/lib/routes';
+import { blog, dp, root } from '@/lib/routes';
 
 interface BreadcrumbItem {
   label: string;
@@ -24,7 +24,7 @@ interface MetadataBreadcrumbProps {
 
 // Default breadcrumb mappings for common routes (hrefs from routes.ts)
 const defaultBreadcrumbs: Record<string, BreadcrumbItem[]> = {
-  '/events': [{ label: 'Home', href: root() }, { label: 'Events', href: events() }],
+  '/dp': [{ label: 'Home', href: root() }, { label: 'Dinner Parties', href: dp() }],
   '/blog': [{ label: 'Home', href: root() }, { label: 'Blog', href: blog() }],
 };
 
@@ -90,7 +90,7 @@ function generateBreadcrumbsFromPath(pathname: string): BreadcrumbItem[] {
 
     // Handle known route patterns (use route builders where available)
     if (segment === 'events') {
-      breadcrumbs.push({ label: 'Events', href: events() });
+      breadcrumbs.push({ label: 'Events', href: '/events' });
     } else if (segment === 'blog') {
       breadcrumbs.push({ label: 'Blog', href: blog() });
     } else {
