@@ -34,8 +34,8 @@
     --secondary: 218 45% 22%; /* Dark navy */
     --secondary-foreground: 214 32% 97%; /* Light grey-blue */
 
-    /* Accent - Pink */
-    --accent: 330 75% 58%; /* Pink accent */
+    /* Accent - Pink (slightly darker for contrast on code bg and light surfaces) */
+    --accent: 330 72% 48%;
     --accent-foreground: 218 45% 14%; /* Navy on pink */
 
     /* Semantic */
@@ -67,6 +67,10 @@
 
     /* Border radius */
     --radius: 0.5rem;
+
+    /* Code (MDX): lighter bg and darker text than generic tertiary/accent in light mode */
+    --code-bg: 214 22% 94%;
+    --code-fg: 218 50% 18%;
 
     /* Sidebar layout */
     --sidebar-width: 16rem;
@@ -133,6 +137,10 @@
 
     --muted: 218 35% 16%;
     --muted-foreground: 214 25% 62%;
+
+    /* Code (MDX): dark mode uses tertiary/foreground */
+    --code-bg: 218 38% 12%;
+    --code-fg: 214 30% 92%;
   }
 }
 
@@ -345,13 +353,13 @@
     font-style: italic;
     margin: 1.5em 0;
   }
-  /* MDX content: code and pre (single source of truth; inline vs block by context) */
+  /* MDX content: code and pre (single source of truth; uses --code-bg / --code-fg palette) */
   .mdx-content pre {
     font-family: var(--font-mono);
     white-space: pre;
     padding: 1em;
-    background: hsl(var(--background-tertiary));
-    color: hsl(var(--foreground));
+    background: hsl(var(--code-bg));
+    color: hsl(var(--code-fg));
     border-radius: 0.5rem;
     overflow-x: auto;
     margin-bottom: 1.5em;
@@ -366,7 +374,7 @@
   }
   .mdx-content :not(pre) > code {
     font-family: var(--font-mono);
-    background: hsl(var(--background-tertiary));
+    background: hsl(var(--code-bg));
     color: hsl(var(--accent));
     padding: 0.15em 0.4em;
     border-radius: 0.3em;

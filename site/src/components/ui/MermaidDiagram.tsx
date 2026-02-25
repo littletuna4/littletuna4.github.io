@@ -7,11 +7,13 @@
  * - Renders Mermaid diagram source as SVG on the client; loads mermaid from CDN only when needed.
  * - Uses a unique id per instance so multiple diagrams on a page work.
  * - Themed: respects dark mode via mermaid.initialize theme when possible.
+ * - Re-renders when theme changes (subscribes to useTheme resolvedTheme) so theme switcher updates diagrams.
  * - Fallback: if render or script load fails, shows the raw source in a code-style block.
  * - No layout shift: container has min-height during load; overflow for wide diagrams.
  */
 
 import React, { useEffect, useId, useRef, useState } from 'react';
+import { useTheme } from '@/components/providers/ThemeProvider';
 
 const MERMAID_CDN_URL = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
 
@@ -73,6 +75,7 @@ export function MermaidDiagram({ source, className }: MermaidDiagramProps): Reac
   const containerRef = useRef<HTMLDivElement>(null);
   const [svgContent, setSvgContent] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const { resolvedTheme } = useTheme();
 
   useEffect(() => {
     const trimmed = source.trim();
@@ -112,7 +115,7 @@ export function MermaidDiagram({ source, className }: MermaidDiagramProps): Reac
     return () => {
       cancelled = true;
     };
-  }, [source, id]);
+  }, [source, id, resolvedTheme]);
 
   if (error) {
     return (
