@@ -1,3 +1,8 @@
+/**
+ * Blog layout: max-width container and KaTeX CSS for LaTeX math in MDX posts.
+ */
+import 'katex/dist/katex.min.css';
+
 export default function BlogLayout({
   children,
 }: {

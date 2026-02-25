@@ -344,7 +344,8 @@
     font-style: italic;
     margin: 1.5em 0;
   }
-  code {
+  /* Base code/pre: only where MDX components are not used (exclude data-mdx-* so MDX output is not overwritten) */
+  code:not([data-mdx-inline]):not([data-mdx-block]) {
     background: hsl(var(--background-tertiary));
     color: hsl(var(--accent));
     padding: 0.15em 0.4em;
@@ -352,7 +353,14 @@
     font-size: 0.95em;
     font-family: var(--font-mono);
   }
-  pre {
+  pre:not([data-mdx-block]) code {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+  }
+  pre:not([data-mdx-block]) {
     background: hsl(var(--background-tertiary));
     color: hsl(var(--accent-foreground));
     padding: 1em;
@@ -361,6 +369,11 @@
     font-size: 0.98em;
     font-family: var(--font-mono);
     margin-bottom: 1.5em;
+    white-space: pre;
+  }
+  /* MDX inline code: ensure monospace (component has font-mono class; this wins if overridden) */
+  code[data-mdx-inline] {
+    font-family: var(--font-mono);
   }
   /* Responsive typography */
   @media (max-width: 600px) {

@@ -1,6 +1,7 @@
 import type { NextConfig } from 'next';
 import createMDX from '@next/mdx';
-import remarkGfm from 'remark-gfm';
+
+// Next 16: Turbopack is default for dev and build. MDX plugin options use string names (serializable) for Turbopack.
 
 const nextConfig: NextConfig = {
   // Enable static export for static site hosting
@@ -48,7 +49,10 @@ const nextConfig: NextConfig = {
 };
 
 const withMDX = createMDX({
-  remarkPlugins: [remarkGfm],
+  options: {
+    remarkPlugins: ['remark-gfm', 'remark-math', 'remark-smartypants'],
+    rehypePlugins: ['rehype-katex'],
+  },
 });
 
 // Merge MDX config with Next.js config

@@ -4,7 +4,7 @@ A modern, responsive website built with Next.js, TypeScript, and Tailwind CSS, o
 
 ## 🚀 Features
 
-- ⚡ **Next.js 15** with App Router
+- ⚡ **Next.js 16** with App Router
 - 🎨 **Tailwind CSS** for styling
 - 📱 **Fully Responsive** design
 - 🔧 **TypeScript** for type safety
@@ -14,15 +14,15 @@ A modern, responsive website built with Next.js, TypeScript, and Tailwind CSS, o
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 15
+- **Framework**: Next.js 16
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
 - **Linting**: ESLint
-- **Build Tool**: Turbopack
+- **Build**: Turbopack (default in Next 16); use `dev:webpack` / `build:webpack` to opt out
 
 ## 📋 Prerequisites
 
-- Node.js 18.17 or later
+- Node.js 20.9 or later
 - npm, yarn, or pnpm
 
 ## 🚀 Getting Started
@@ -46,6 +46,8 @@ yarn dev
 # or
 pnpm dev
 ```
+
+Next 16 uses Turbopack by default. Use `pnpm dev:webpack` or `pnpm build:webpack` if you need to fall back to webpack.
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 

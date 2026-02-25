@@ -1,6 +1,28 @@
 import type { MDXComponents } from 'mdx/types';
 import React, { ReactNode } from 'react';
 import { ExpandableSection } from '@/components/ui/ExpandableSection';
+import { MermaidDiagram } from '@/components/ui/MermaidDiagram';
+
+/** Flatten React children to a single string (for code block content). */
+function getCodeBlockText(children: ReactNode): string {
+  if (typeof children === 'string') return children;
+  if (typeof children === 'number') return String(children);
+  const array = React.Children.toArray(children);
+  return array
+    .map((child) => {
+      if (typeof child === 'string' || typeof child === 'number') return String(child);
+      if (child !== null && typeof child === 'object' && 'props' in child) {
+        return getCodeBlockText((child as React.ReactElement<{ children?: ReactNode }>).props.children);
+      }
+      return '';
+    })
+    .join('');
+}
+
+/** True if code content has a newline (fenced block without language still comes as block, not inline). */
+function codeContentHasNewline(children: ReactNode): boolean {
+  return getCodeBlockText(children).includes('\n');
+}
 
 // Custom components for MDX
 const CustomHeading = ({ 
@@ -35,20 +57,36 @@ const CustomParagraph = ({ children }: { children: ReactNode }) => (
   </p>
 );
 
+const MERMAID_LANGUAGE_CLASS = 'language-mermaid';
+
+/** Inline: no className and single line. Block: className present or content has newlines. Mermaid: language-mermaid. */
 const CustomCode = ({ children, className }: { children: ReactNode; className?: string }) => {
-  const isInline = !className;
-  
+  const hasLanguageClass = Boolean(className && String(className).trim().length > 0);
+  const looksLikeBlock = hasLanguageClass || codeContentHasNewline(children);
+  const isInline = !looksLikeBlock;
+
   if (isInline) {
     return (
-      <code className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-1.5 py-0.5 rounded text-sm font-mono">
+      <code
+        data-mdx-inline
+        className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-1.5 py-0.5 rounded text-sm font-mono"
+      >
         {children}
       </code>
     );
   }
 
+  const isMermaid = typeof className === 'string' && className.includes(MERMAID_LANGUAGE_CLASS);
+  if (isMermaid) {
+    return <MermaidDiagram source={getCodeBlockText(children)} />;
+  }
+
   return (
-    <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg overflow-x-auto mb-4">
-      <code className={`text-sm font-mono text-gray-800 dark:text-gray-200 ${className}`}>
+    <pre
+      data-mdx-block
+      className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg overflow-x-auto mb-4 font-mono text-sm whitespace-pre"
+    >
+      <code data-mdx-block className={`text-gray-800 dark:text-gray-200 ${className ?? ''}`}>
         {children}
       </code>
     </pre>
