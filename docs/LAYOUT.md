@@ -9,7 +9,7 @@ The app uses a **sidebar layout** (no sticky header). The sidebar is fully respo
 
 ## Key components
 
-- **`LayoutShell`** – Client wrapper used in root layout. Renders `Sidebar`, the mobile top bar, and the main content wrapper (including `Footer`). Holds mobile sidebar open/close state and desktop collapsed state (read/write from localStorage).
+- **`LayoutShell`** – Client wrapper used in root layout. Renders `Sidebar`, the mobile top bar, and the main content wrapper (including `Footer`). Holds mobile sidebar open/close state and desktop collapsed state (read/write from localStorage). For the `/dp` route only, renders a full-viewport passthrough (no Sidebar, mobile bar, or Footer) so the embedded iframe is the only content and only one scroll context (no nested scroll bars); see `docs/DP_IFRAME_EMBED.md`.
 - **`Sidebar`** – Logo, nav links, theme toggle, contact. Fixed left on desktop, collapsible to icon-only; overlay drawer on mobile, controlled by `isMobileOpen` / `onMobileClose`. Receives `isDesktopCollapsed` and `onDesktopCollapseToggle` from `LayoutShell`.
 - **`Footer`** – Unchanged; still rendered below main content inside `LayoutShell`.
 

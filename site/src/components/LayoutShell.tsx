@@ -6,18 +6,51 @@
  * - Provide mobile menu state and trigger bar (logo + hamburger) for small screens.
  * - Desktop: persist sidebar collapsed state in localStorage; main area padding reflects sidebar width.
  * - Main content has left margin on desktop to account for sidebar; full width on mobile.
+ * - /dp route: full-viewport passthrough (no sidebar, header, footer) so only the embedded iframe scrolls and nested scroll bars are avoided.
  */
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { Menu } from 'lucide-react';
 import { root } from '@/lib/routes';
 import Sidebar from '@/components/Sidebar';
 import Footer from '@/components/Footer';
 import { APP_CONSTS } from '@/data/app';
 
+const DP_PATH = '/dp';
+
 const SIDEBAR_COLLAPSED_STORAGE_KEY = 'sidebar-collapsed';
+
+/**
+ * Locks html/body to one viewport and removes default margin so only the iframe scrolls (no nested scroll bars).
+ * Cleans up on unmount or when navigating away from /dp.
+ */
+function DpFullViewportContainer({ children }: { children: React.ReactNode }): React.ReactElement {
+  useEffect(() => {
+    const html = document.documentElement;
+    const body = document.body;
+    const prevHtmlOverflow = html.style.overflow;
+    const prevHtmlHeight = html.style.height;
+    const prevBodyOverflow = body.style.overflow;
+    const prevBodyHeight = body.style.height;
+    const prevBodyMargin = body.style.margin;
+    html.style.overflow = 'hidden';
+    html.style.height = '100%';
+    body.style.overflow = 'hidden';
+    body.style.height = '100%';
+    body.style.margin = '0';
+    return () => {
+      html.style.overflow = prevHtmlOverflow;
+      html.style.height = prevHtmlHeight;
+      body.style.overflow = prevBodyOverflow;
+      body.style.height = prevBodyHeight;
+      body.style.margin = prevBodyMargin;
+    };
+  }, []);
+  return <div className="min-h-screen w-full">{children}</div>;
+}
 
 function readStoredSidebarCollapsed(): boolean {
   if (typeof window === 'undefined') return false;
@@ -34,6 +67,7 @@ type LayoutShellProps = {
 };
 
 export default function LayoutShell({ children }: LayoutShellProps): React.ReactElement {
+  const pathname = usePathname();
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isDesktopCollapsed, setIsDesktopCollapsed] = useState(false);
 
@@ -52,6 +86,12 @@ export default function LayoutShell({ children }: LayoutShellProps): React.React
       return next;
     });
   };
+
+  if (pathname === DP_PATH) {
+    return (
+      <DpFullViewportContainer>{children}</DpFullViewportContainer>
+    );
+  }
 
   return (
     <>

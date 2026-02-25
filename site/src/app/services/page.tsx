@@ -41,7 +41,7 @@ const services: readonly ServiceLink[] = [
   },
   {
     label: 'cold_draw',
-    link: 'https://obsidian-utils-1040520853607.australia-southeast1.run.app',
+    link: 'https://obsidian-utils-1040520853607.australia-southeast1.run.app/admin',
   }
 ] as const;
 

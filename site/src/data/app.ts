@@ -24,7 +24,7 @@ export const APP_CONSTS: AppConfig = {
     APP_LINKEDIN: "https://www.linkedin.com/in/anthonycerqui/",
     APP_INSTAGRAM: "https://www.instagram.com/tony_cerqui/",
     // APP_YOUTUBE: "https://www.youtube.com/ytpn",
-    APP_CONTACT_EMAIL: "adpcerqui@gmail.com",
+    APP_CONTACT_EMAIL: "me@tony.is-a.dev",
     APP_CONTACT_PHONE: "+61 457 271 181",   
 }
 
