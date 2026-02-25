@@ -192,7 +192,8 @@
   --color-muted-foreground: hsl(var(--muted-foreground));
 
   --font-sans: var(--font-geist-sans), system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), monospace;
+  /* Fallback so code is monospace when --font-geist-mono is not loaded */
+  --font-mono: var(--font-geist-mono, ui-monospace), monospace;
 
   --radius: var(--radius);
 }
@@ -344,36 +345,32 @@
     font-style: italic;
     margin: 1.5em 0;
   }
-  /* Base code/pre: only where MDX components are not used (exclude data-mdx-* so MDX output is not overwritten) */
-  code:not([data-mdx-inline]):not([data-mdx-block]) {
-    background: hsl(var(--background-tertiary));
-    color: hsl(var(--accent));
-    padding: 0.15em 0.4em;
-    border-radius: 0.3em;
-    font-size: 0.95em;
+  /* MDX content: code and pre (single source of truth; inline vs block by context) */
+  .mdx-content pre {
     font-family: var(--font-mono);
+    white-space: pre;
+    padding: 1em;
+    background: hsl(var(--background-tertiary));
+    color: hsl(var(--foreground));
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    margin-bottom: 1.5em;
+    font-size: 0.95em;
   }
-  pre:not([data-mdx-block]) code {
+  .mdx-content pre code {
     background: transparent;
     padding: 0;
     color: inherit;
     font-family: inherit;
     font-size: inherit;
   }
-  pre:not([data-mdx-block]) {
+  .mdx-content :not(pre) > code {
+    font-family: var(--font-mono);
     background: hsl(var(--background-tertiary));
-    color: hsl(var(--accent-foreground));
-    padding: 1em;
-    border-radius: 0.5em;
-    overflow-x: auto;
-    font-size: 0.98em;
-    font-family: var(--font-mono);
-    margin-bottom: 1.5em;
-    white-space: pre;
-  }
-  /* MDX inline code: ensure monospace (component has font-mono class; this wins if overridden) */
-  code[data-mdx-inline] {
-    font-family: var(--font-mono);
+    color: hsl(var(--accent));
+    padding: 0.15em 0.4em;
+    border-radius: 0.3em;
+    font-size: 0.95em;
   }
   /* Responsive typography */
   @media (max-width: 600px) {

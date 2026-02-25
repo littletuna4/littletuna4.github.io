@@ -19,11 +19,6 @@ function getCodeBlockText(children: ReactNode): string {
     .join('');
 }
 
-/** True if code content has a newline (fenced block without language still comes as block, not inline). */
-function codeContentHasNewline(children: ReactNode): boolean {
-  return getCodeBlockText(children).includes('\n');
-}
-
 // Custom components for MDX
 const CustomHeading = ({ 
   children, 
@@ -59,39 +54,15 @@ const CustomParagraph = ({ children }: { children: ReactNode }) => (
 
 const MERMAID_LANGUAGE_CLASS = 'language-mermaid';
 
-/** Inline: no className and single line. Block: className present or content has newlines. Mermaid: language-mermaid. */
-const CustomCode = ({ children, className }: { children: ReactNode; className?: string }) => {
-  const hasLanguageClass = Boolean(className && String(className).trim().length > 0);
-  const looksLikeBlock = hasLanguageClass || codeContentHasNewline(children);
-  const isInline = !looksLikeBlock;
-
-  if (isInline) {
-    return (
-      <code
-        data-mdx-inline
-        className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-1.5 py-0.5 rounded text-sm font-mono"
-      >
-        {children}
-      </code>
-    );
-  }
-
+/** Only special-case: Mermaid. All other code (inline and block) passes through; styling is via .mdx-content in globals.css. */
+function CustomCode(props: { children: ReactNode; className?: string }) {
+  const { children, className } = props;
   const isMermaid = typeof className === 'string' && className.includes(MERMAID_LANGUAGE_CLASS);
   if (isMermaid) {
     return <MermaidDiagram source={getCodeBlockText(children)} />;
   }
-
-  return (
-    <pre
-      data-mdx-block
-      className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg overflow-x-auto mb-4 font-mono text-sm whitespace-pre"
-    >
-      <code data-mdx-block className={`text-gray-800 dark:text-gray-200 ${className ?? ''}`}>
-        {children}
-      </code>
-    </pre>
-  );
-};
+  return <code {...props} />;
+}
 
 const CustomBlockquote = ({ children }: { children: ReactNode }) => (
   <blockquote className="border-l-4 border-blue-500 pl-4 py-2 my-4 bg-blue-50 dark:bg-blue-900/20 text-gray-700 dark:text-gray-300 italic">
@@ -165,7 +136,6 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     h6: (props) => <CustomHeading level={6} {...props} />,
     p: CustomParagraph,
     code: CustomCode,
-    pre: ({ children }) => <>{children}</>,
     blockquote: CustomBlockquote,
     ul: (props) => <CustomList {...props} />,
     ol: (props) => <CustomList ordered {...props} />,

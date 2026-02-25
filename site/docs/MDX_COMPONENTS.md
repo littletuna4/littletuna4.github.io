@@ -2,6 +2,10 @@
 
 Custom components available in all blog and MDX content via `useMDXComponents` (see `src/mdx-components.tsx`). Styling follows THEME_SYSTEM.md.
 
+## Code blocks and inline code
+
+Inline and fenced code are styled via the `.mdx-content` scope in `src/app/globals.css`: monospace font, line breaks preserved for blocks, and distinct background/padding for inline snippets. The MDX compiler emits `<pre><code>...</code></pre>` for fenced blocks and `<code>...</code>` for inline; context (inside `pre` or not) drives the CSS. The only special handling in components is Mermaid (see below).
+
 ## Tables
 
 GitHub Flavored Markdown (GFM) table syntax is supported via `remark-gfm` (see `next.config.ts`). The plugin is registered under `options.remarkPlugins` using the string `'remark-gfm'` so that Turbopack (used in build) can resolve it; function references are not serializable for the Rust pipeline. Tables are parsed from standard markdown and rendered with custom table components in `mdx-components.tsx` (CustomTable, thead, tbody, tr, th, td) for borders, header styling, and horizontal scroll on small screens.
