@@ -1,3 +1,7 @@
+import architectureImage from './architecture.png';
+import sequenceImage from './sequence.png';
+import simplen8nImage from './simplen8n.png';
+
 # Automating Trade Logging from CMC Markets
 
 Like many retail brokers, **CMC Markets doesn't offer an API or robust reporting tools**. For anyone who wants clean trade history for analytics, tax, or journaling, this quickly becomes painful. My solution was to automate the process end-to-end: from receiving a trade confirmation email, to structured trade data in Google Sheets.
@@ -37,15 +41,15 @@ A plain regex parser would constantly break. Instead, I use an **LLM (Google Gem
 
 ## The N8N Workflow
 
-![N8N Workflow](./simplen8n.png)
+<Image src={simplen8nImage} alt="N8N Workflow" className="max-w-full h-auto rounded-lg shadow-sm mb-4" />
 
 ## Sequence Diagram
 
-![Sequence Diagram](./sequence.png)
+<Image src={sequenceImage} alt="Sequence Diagram" className="max-w-full h-auto rounded-lg shadow-sm mb-4" />
 
 ## Architecture
 
-![Architecture Diagram](./architecture.png)
+<Image src={architectureImage} alt="Architecture Diagram" className="max-w-full h-auto rounded-lg shadow-sm mb-4" />
 
 ## Preprocessing Challenge
 

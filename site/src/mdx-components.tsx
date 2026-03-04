@@ -1,4 +1,5 @@
 import type { MDXComponents } from 'mdx/types';
+import Image from 'next/image';
 import React, { ReactNode } from 'react';
 import { ExpandableSection } from '@/components/ui/ExpandableSection';
 import { MermaidDiagram } from '@/components/ui/MermaidDiagram';
@@ -149,14 +150,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     td: CustomTableCell,
     hr: () => <hr className="my-8 border-gray-300 dark:border-gray-600" />,
     ExpandableSection,
-    img: ({ src, alt, ...props }) => (
-      <img 
-        src={src} 
-        alt={alt}
-        className="max-w-full h-auto rounded-lg shadow-sm mb-4"
-        {...props}
-      />
-    ),
+    Image,
     ...components,
   };
 }

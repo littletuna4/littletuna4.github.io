@@ -1,3 +1,5 @@
+import bomRadarImage from './images_bris_128_202504291340.png';
+
 # Radar Rainfall Modelling with BOM and GCP
 
 Recently, I was approached by a friend with a task that felt a bit unconventional, very interesting and nicely bite sized. He was working on a water modelling problem and wanted to build a system that used **spatial rainfall data** to dynamically estimate water levels and flood risk. Accuracy was the main goal, and we are both curious about how far we could push it with limited resources.
@@ -12,7 +14,7 @@ But it didn't take long for reality to kick in. Between API rate limits, unpredi
 
 Rather than trying to ingest huge amounts of direct station-based data, we started thinking differently. Radar images from the **Bureau of Meteorology (BOM)** gave us exactly what we needed—spatial rainfall patterns—just encoded visually.
 
-![BOM Radar Image - Brisbane 128km Coverage](./images_bris_128_202504291340.png)
+<Image src={bomRadarImage} alt="BOM Radar Image - Brisbane 128km Coverage" className="max-w-full h-auto rounded-lg shadow-sm mb-4" />
 
 We switched gears. Instead of thousands of API calls constantly, we'd scrape just **three small images** every five minutes—one for each radar coverage zone (64km, 128km, 256km) around Brisbane. The images could be processed to extract rainfall intensity by interpreting their **pixel colours**.
 
