@@ -9,6 +9,7 @@
  * - Works with mouse and touch; no external panzoom libs
  * - During pan, transform is applied via ref (direct DOM) to avoid re-renders and reduce jitter on touch
  * - Pointer capture used so touch pan keeps receiving move events on mobile (avoids one-frame-then-lock)
+ * - Double-tap only when a single pointer is down; second finger of a pinch must not trigger double-tap
  */
 
 import {
@@ -45,6 +46,7 @@ export function PanzoomSurface({ children, className = '' }: PanzoomSurfaceProps
   const lastPointerRef = useRef<{ x: number; y: number } | null>(null);
   const lastTranslateRef = useRef({ x: 0, y: 0 });
   const lastTapRef = useRef<number>(0);
+  const activePointerCountRef = useRef(0);
   const capturedPointerIdRef = useRef<number | null>(null);
   const surfaceRef = useRef<HTMLDivElement>(null);
   const transformElRef = useRef<HTMLDivElement>(null);
@@ -81,37 +83,45 @@ export function PanzoomSurface({ children, className = '' }: PanzoomSurfaceProps
     [clampScale]
   );
 
-  const releaseCapture = useCallback((target: HTMLElement | null) => {
-    if (target && capturedPointerIdRef.current !== null) {
-      try {
-        target.releasePointerCapture(capturedPointerIdRef.current);
-      } catch {
-        // ignore if already released
-      }
-      capturedPointerIdRef.current = null;
+  const releaseCaptureForPointer = useCallback((target: HTMLElement, pointerId: number) => {
+    if (capturedPointerIdRef.current !== pointerId) return;
+    try {
+      target.releasePointerCapture(pointerId);
+    } catch {
+      // ignore if already released
     }
+    capturedPointerIdRef.current = null;
   }, []);
 
   const handlePointerDown = useCallback(
     (e: ReactPointerEvent<HTMLDivElement>) => {
       if (e.button !== 0) return;
+      activePointerCountRef.current += 1;
+      const isSinglePointer = activePointerCountRef.current === 1;
       const now = Date.now();
-      if (now - lastTapRef.current < DOUBLE_TAP_MS) {
+      if (isSinglePointer && now - lastTapRef.current < DOUBLE_TAP_MS) {
         setScale((prev) => (prev > 1 ? 1 : 1.5));
         setTranslateX(0);
         setTranslateY(0);
         lastTapRef.current = 0;
+        activePointerCountRef.current -= 1;
         return;
       }
-      lastTapRef.current = now;
+      if (isSinglePointer) {
+        lastTapRef.current = now;
+      }
       e.preventDefault();
       isPanningRef.current = true;
       const target = e.currentTarget;
-      target.setPointerCapture(e.pointerId);
-      capturedPointerIdRef.current = e.pointerId;
+      if (activePointerCountRef.current === 1) {
+        target.setPointerCapture(e.pointerId);
+        capturedPointerIdRef.current = e.pointerId;
+      }
       setIsDragging(true);
-      lastPointerRef.current = { x: e.clientX, y: e.clientY };
-      lastTranslateRef.current = { x: translateX, y: translateY };
+      if (activePointerCountRef.current === 1) {
+        lastPointerRef.current = { x: e.clientX, y: e.clientY };
+        lastTranslateRef.current = { x: translateX, y: translateY };
+      }
     },
     [translateX, translateY]
   );
@@ -136,30 +146,37 @@ export function PanzoomSurface({ children, className = '' }: PanzoomSurfaceProps
 
   const handlePointerUp = useCallback(
     (e: ReactPointerEvent<HTMLDivElement>) => {
-      isPanningRef.current = false;
-      releaseCapture(e.currentTarget);
-      if (lastPointerRef.current) {
-        setTranslateX(lastTranslateRef.current.x);
-        setTranslateY(lastTranslateRef.current.y);
+      const target = e.currentTarget;
+      const wasCapturedPointer = capturedPointerIdRef.current === e.pointerId;
+      releaseCaptureForPointer(target, e.pointerId);
+      activePointerCountRef.current = Math.max(0, activePointerCountRef.current - 1);
+      if (wasCapturedPointer || activePointerCountRef.current === 0) {
+        isPanningRef.current = false;
+        if (lastPointerRef.current) {
+          setTranslateX(lastTranslateRef.current.x);
+          setTranslateY(lastTranslateRef.current.y);
+        }
+        setIsDragging(false);
+        lastPointerRef.current = null;
       }
-      setIsDragging(false);
-      lastPointerRef.current = null;
     },
-    [releaseCapture]
+    [releaseCaptureForPointer]
   );
 
   const handlePointerLeave = useCallback(
     (e: ReactPointerEvent<HTMLDivElement>) => {
+      const target = e.currentTarget;
+      releaseCaptureForPointer(target, e.pointerId);
+      activePointerCountRef.current = Math.max(0, activePointerCountRef.current - 1);
       if (lastPointerRef.current) {
         isPanningRef.current = false;
-        releaseCapture(e.currentTarget);
         setTranslateX(lastTranslateRef.current.x);
         setTranslateY(lastTranslateRef.current.y);
       }
       setIsDragging(false);
       lastPointerRef.current = null;
     },
-    [releaseCapture]
+    [releaseCaptureForPointer]
   );
 
   const transformStyle = isDragging
