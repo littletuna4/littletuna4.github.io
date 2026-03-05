@@ -2,6 +2,10 @@
 
 Custom components available in all blog and MDX content via `useMDXComponents` (see `src/mdx-components.tsx`). Styling follows THEME_SYSTEM.md.
 
+## Images and code blocks: pan/zoom modals
+
+Clicking an image or a fenced code block in MDX opens a modal: images in a pan/zoom modal, code in a scroll-only modal. See [mdx-panzoom-modals.md](mdx-panzoom-modals.md) for behavior, opt-out (per image or via `DisablePanzoomModalsForChildrenProvider`), and accessibility.
+
 ## Code blocks and inline code
 
 Inline and fenced code are styled via the `.mdx-content` scope in `src/app/globals.css`: monospace font, line breaks preserved for blocks, and distinct background/padding for inline snippets. The MDX compiler emits `<pre><code>...</code></pre>` for fenced blocks and `<code>...</code>` for inline; context (inside `pre` or not) drives the CSS. The only special handling in components is Mermaid (see below).

@@ -1,8 +1,9 @@
 import type { MDXComponents } from 'mdx/types';
-import Image from 'next/image';
 import React, { ReactNode } from 'react';
 import { ExpandableSection } from '@/components/ui/ExpandableSection';
-import { MermaidDiagram } from '@/components/ui/MermaidDiagram';
+import { MermaidDiagramWithModal } from '@/components/ui/MermaidDiagramWithModal';
+import { MdxImagePanzoomModalWrapper } from '@/components/ui/MdxImagePanzoomModalWrapper';
+import { PreWithCodeModalTrigger } from '@/components/ui/PreWithCodeModalTrigger';
 
 /** Flatten React children to a single string (for code block content). */
 function getCodeBlockText(children: ReactNode): string {
@@ -60,9 +61,55 @@ function CustomCode(props: { children: ReactNode; className?: string }) {
   const { children, className } = props;
   const isMermaid = typeof className === 'string' && className.includes(MERMAID_LANGUAGE_CLASS);
   if (isMermaid) {
-    return <MermaidDiagram source={getCodeBlockText(children)} />;
+    return <MermaidDiagramWithModal source={getCodeBlockText(children)} />;
   }
   return <code {...props} />;
+}
+
+type CodeElementProps = { className?: string; children?: ReactNode };
+
+function isCodeBlockChild(
+  child: React.ReactNode
+): child is React.ReactElement<CodeElementProps> & { type: 'code' } {
+  if (child === null || typeof child !== 'object' || !('props' in child)) return false;
+  const el = child as React.ReactElement<CodeElementProps>;
+  const className = el.props?.className;
+  return (
+    el.type === 'code' &&
+    typeof className === 'string' &&
+    className.startsWith('language-') &&
+    !className.includes(MERMAID_LANGUAGE_CLASS)
+  );
+}
+
+function isMermaidCodeBlockChild(child: React.ReactNode): boolean {
+  if (child === null || typeof child !== 'object' || !('props' in child)) return false;
+  const el = child as React.ReactElement<CodeElementProps>;
+  return (
+    el.type === 'code' &&
+    typeof el.props?.className === 'string' &&
+    el.props.className.includes(MERMAID_LANGUAGE_CLASS)
+  );
+}
+
+/** Wraps pre so that fenced code blocks (language-*) open in a scrollable modal; mermaid renders without pre wrapper. */
+function CustomPre(props: React.ComponentPropsWithoutRef<'pre'>) {
+  const { children, ...restPreProps } = props;
+  const arr = React.Children.toArray(children);
+  const first = arr[0];
+  if (arr.length === 1 && isMermaidCodeBlockChild(first)) {
+    return <>{children}</>;
+  }
+  if (arr.length === 1 && isCodeBlockChild(first)) {
+    const codeClassName = first.props.className ?? '';
+    const codeText = getCodeBlockText(first.props.children);
+    return (
+      <PreWithCodeModalTrigger codeText={codeText} codeClassName={codeClassName}>
+        <pre {...restPreProps}>{children}</pre>
+      </PreWithCodeModalTrigger>
+    );
+  }
+  return <pre {...restPreProps}>{children}</pre>;
 }
 
 const CustomBlockquote = ({ children }: { children: ReactNode }) => (
@@ -137,6 +184,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     h6: (props) => <CustomHeading level={6} {...props} />,
     p: CustomParagraph,
     code: CustomCode,
+    pre: CustomPre,
     blockquote: CustomBlockquote,
     ul: (props) => <CustomList {...props} />,
     ol: (props) => <CustomList ordered {...props} />,
@@ -150,7 +198,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     td: CustomTableCell,
     hr: () => <hr className="my-8 border-gray-300 dark:border-gray-600" />,
     ExpandableSection,
-    Image,
+    Image: MdxImagePanzoomModalWrapper,
     ...components,
   };
 }
