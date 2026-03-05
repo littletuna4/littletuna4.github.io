@@ -22,7 +22,7 @@ import {
 } from 'react';
 
 const SCALE_MIN = 0.5;
-const SCALE_MAX = 4;
+const SCALE_MAX = 12;
 const SCALE_STEP = 0.25;
 const DOUBLE_TAP_MS = 300;
 const PAN_CLAMP_PX = 1200;
