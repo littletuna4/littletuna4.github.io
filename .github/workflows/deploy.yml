@@ -1,7 +1,8 @@
 # Builds the Next.js static site from ./site and deploys it to GitHub Pages.
 # Required: In repo Settings → Pages → Build and deployment → Source must be
 # "GitHub Actions". If set to "Deploy from a branch", the repo root (e.g. README.md)
-# is served instead of this workflow's artifact.
+# is served instead of this workflow's artifact, and the default "pages-build-deployment"
+# workflow will also run on every push; set Source to "GitHub Actions" to disable it.
 name: Build and Deploy to GitHub Pages
 
 on:

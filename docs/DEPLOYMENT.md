@@ -19,6 +19,8 @@ If the deployed URL shows the repository root (e.g. only the root `README.md`), 
 2. Under **Build and deployment**, set **Source** to **GitHub Actions** (not “Deploy from a branch”).
 3. Save. The next successful run of the “Build and Deploy to GitHub Pages” workflow will deploy the built site; the root README will no longer be the Pages content.
 
+Setting Source to **GitHub Actions** also disables the default **pages-build-deployment** workflow. If both that workflow and this repo's deploy workflow run on every commit, set the Pages source to **GitHub Actions** so only the custom workflow runs.
+
 ## Build details
 
 - Workflow `working-directory` is `./site`; all build steps run there.

@@ -10,6 +10,7 @@
  * - During pan, transform is applied via ref (direct DOM) to avoid re-renders and reduce jitter on touch
  * - Pointer capture used so touch pan keeps receiving move events on mobile (avoids one-frame-then-lock)
  * - Double-tap only when a single pointer is down; second finger of a pinch must not trigger double-tap
+ * - Zoom on mobile: two-finger pinch (MDN pattern — cache both pointers, scale from distance ratio)
  */
 
 import {
@@ -27,9 +28,17 @@ const SCALE_MAX = 12;
 const SCALE_STEP = 0.25;
 const DOUBLE_TAP_MS = 300;
 const PAN_CLAMP_PX = 1200;
+const PINCH_DISTANCE_SENTINEL = -1;
 
 function buildTransformString(translateX: number, translateY: number, scale: number): string {
   return `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`;
+}
+
+function distance(
+  a: { clientX: number; clientY: number },
+  b: { clientX: number; clientY: number }
+): number {
+  return Math.hypot(b.clientX - a.clientX, b.clientY - a.clientY);
 }
 
 export interface PanzoomSurfaceProps {
@@ -51,9 +60,15 @@ export function PanzoomSurface({ children, className = '' }: PanzoomSurfaceProps
   const surfaceRef = useRef<HTMLDivElement>(null);
   const transformElRef = useRef<HTMLDivElement>(null);
   const scaleRef = useRef(scale);
+  const translateXRef = useRef(translateX);
+  const translateYRef = useRef(translateY);
   const isPanningRef = useRef(false);
+  const pointerCacheRef = useRef<Map<number, { clientX: number; clientY: number }>>(new Map());
+  const lastPinchDistanceRef = useRef<number>(PINCH_DISTANCE_SENTINEL);
 
   scaleRef.current = scale;
+  translateXRef.current = translateX;
+  translateYRef.current = translateY;
   isPanningRef.current = isDragging;
 
   useEffect(() => {
@@ -65,7 +80,7 @@ export function PanzoomSurface({ children, className = '' }: PanzoomSurfaceProps
     const el = surfaceRef.current;
     if (!el) return;
     const onTouchMove = (e: TouchEvent) => {
-      if (isPanningRef.current) e.preventDefault();
+      if (isPanningRef.current || pointerCacheRef.current.size >= 2) e.preventDefault();
     };
     el.addEventListener('touchmove', onTouchMove, { passive: false });
     return () => el.removeEventListener('touchmove', onTouchMove);
@@ -112,6 +127,7 @@ export function PanzoomSurface({ children, className = '' }: PanzoomSurfaceProps
       }
       e.preventDefault();
       isPanningRef.current = true;
+      pointerCacheRef.current.set(e.pointerId, { clientX: e.clientX, clientY: e.clientY });
       const target = e.currentTarget;
       if (activePointerCountRef.current === 1) {
         target.setPointerCapture(e.pointerId);
@@ -128,20 +144,50 @@ export function PanzoomSurface({ children, className = '' }: PanzoomSurfaceProps
 
   const handlePointerMove = useCallback(
     (e: ReactPointerEvent<HTMLDivElement>) => {
-      if (!lastPointerRef.current) return;
       e.preventDefault();
-      const dx = e.clientX - lastPointerRef.current.x;
-      const dy = e.clientY - lastPointerRef.current.y;
-      const newX = Math.max(-PAN_CLAMP_PX, Math.min(PAN_CLAMP_PX, lastTranslateRef.current.x + dx));
-      const newY = Math.max(-PAN_CLAMP_PX, Math.min(PAN_CLAMP_PX, lastTranslateRef.current.y + dy));
-      lastTranslateRef.current = { x: newX, y: newY };
-      lastPointerRef.current = { x: e.clientX, y: e.clientY };
-      const el = transformElRef.current;
-      if (el) {
-        el.style.transform = buildTransformString(newX, newY, scaleRef.current);
+      const cache = pointerCacheRef.current;
+      cache.set(e.pointerId, { clientX: e.clientX, clientY: e.clientY });
+
+      if (cache.size === 2) {
+        const [[, posA], [, posB]] = Array.from(cache.entries());
+        const curDist = distance(posA, posB);
+        if (lastPinchDistanceRef.current > 0) {
+          const ratio = curDist / lastPinchDistanceRef.current;
+          const newScale = clampScale(scaleRef.current * ratio);
+          scaleRef.current = newScale;
+          const el = transformElRef.current;
+          if (el) {
+            el.style.transform = buildTransformString(
+              translateXRef.current,
+              translateYRef.current,
+              newScale
+            );
+          }
+        }
+        lastPinchDistanceRef.current = curDist;
+        return;
+      }
+
+      if (cache.size === 1) {
+        lastPinchDistanceRef.current = PINCH_DISTANCE_SENTINEL;
+      }
+
+      if (cache.size === 1 && lastPointerRef.current) {
+        const dx = e.clientX - lastPointerRef.current.x;
+        const dy = e.clientY - lastPointerRef.current.y;
+        const newX = Math.max(-PAN_CLAMP_PX, Math.min(PAN_CLAMP_PX, lastTranslateRef.current.x + dx));
+        const newY = Math.max(-PAN_CLAMP_PX, Math.min(PAN_CLAMP_PX, lastTranslateRef.current.y + dy));
+        lastTranslateRef.current = { x: newX, y: newY };
+        translateXRef.current = newX;
+        translateYRef.current = newY;
+        lastPointerRef.current = { x: e.clientX, y: e.clientY };
+        const el = transformElRef.current;
+        if (el) {
+          el.style.transform = buildTransformString(newX, newY, scaleRef.current);
+        }
       }
     },
-    []
+    [clampScale]
   );
 
   const handlePointerUp = useCallback(
@@ -149,7 +195,12 @@ export function PanzoomSurface({ children, className = '' }: PanzoomSurfaceProps
       const target = e.currentTarget;
       const wasCapturedPointer = capturedPointerIdRef.current === e.pointerId;
       releaseCaptureForPointer(target, e.pointerId);
+      pointerCacheRef.current.delete(e.pointerId);
       activePointerCountRef.current = Math.max(0, activePointerCountRef.current - 1);
+      if (pointerCacheRef.current.size < 2) {
+        lastPinchDistanceRef.current = PINCH_DISTANCE_SENTINEL;
+        setScale(scaleRef.current);
+      }
       if (wasCapturedPointer || activePointerCountRef.current === 0) {
         isPanningRef.current = false;
         if (lastPointerRef.current) {
@@ -167,7 +218,12 @@ export function PanzoomSurface({ children, className = '' }: PanzoomSurfaceProps
     (e: ReactPointerEvent<HTMLDivElement>) => {
       const target = e.currentTarget;
       releaseCaptureForPointer(target, e.pointerId);
+      pointerCacheRef.current.delete(e.pointerId);
       activePointerCountRef.current = Math.max(0, activePointerCountRef.current - 1);
+      if (pointerCacheRef.current.size < 2) {
+        lastPinchDistanceRef.current = PINCH_DISTANCE_SENTINEL;
+        setScale(scaleRef.current);
+      }
       if (lastPointerRef.current) {
         isPanningRef.current = false;
         setTranslateX(lastTranslateRef.current.x);
@@ -180,7 +236,13 @@ export function PanzoomSurface({ children, className = '' }: PanzoomSurfaceProps
   );
 
   const transformStyle = isDragging
-    ? { transform: buildTransformString(lastTranslateRef.current.x, lastTranslateRef.current.y, scale) }
+    ? {
+        transform: buildTransformString(
+          lastTranslateRef.current.x,
+          lastTranslateRef.current.y,
+          scaleRef.current
+        ),
+      }
     : { transform: buildTransformString(translateX, translateY, scale) };
 
   return (
