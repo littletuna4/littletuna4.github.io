@@ -6,7 +6,7 @@ Images and fenced code blocks in MDX open in modals: images in a **pan/zoom** mo
 
 - **Images**: Clicking an `<Image>` (Next.js) in MDX opens a full overlay with the same image. You can zoom (wheel, double-click) and pan (drag). Close via backdrop click, Escape, or the close (X) button. Uses `PanzoomModalRoot` + `PanzoomSurface`. MDX must not import `Image` from `next/image` so the global `Image` (wrapper) is used.
 - **Code blocks**: Fenced blocks (e.g. ` ```js `) are wrapped in a clickable block. Click opens a modal with the same code in a scrollable area.
-- **Mermaid**: Fenced ` ```mermaid ` blocks render as diagrams; clicking opens a pan/zoom modal with the same diagram.
+- **Mermaid**: Fenced ` ```mermaid ` blocks render as diagrams; clicking opens a pan/zoom modal with the same diagram. The modal measures its content area, renders the diagram at 2× that size, then scales down 50% so the diagram fills the viewport on open and stays sharp when panning or zooming.
 
 ## Components
 

@@ -10,6 +10,8 @@
  * - Re-renders when theme changes (subscribes to useTheme resolvedTheme) so theme switcher updates diagrams.
  * - Fallback: if render or script load fails, shows the raw source in a code-style block.
  * - No layout shift: container has min-height during load; overflow for wide diagrams.
+ * - Optional intrinsicSize: when set (e.g. for modal), container and SVG use that size so the SVG is
+ *   rendered at high resolution and can be scaled down for display; keeps pan/zoom sharp.
  */
 
 import React, { useEffect, useId, useRef, useState } from 'react';
@@ -63,14 +65,21 @@ function getMermaidTheme(): 'default' | 'dark' {
   return document.documentElement.classList.contains('dark') ? 'dark' : 'default';
 }
 
+export interface MermaidDiagramIntrinsicSize {
+  width: number;
+  height: number;
+}
+
 export interface MermaidDiagramProps {
   /** Raw Mermaid diagram source (e.g. "graph TD\n  A --> B"). */
   source: string;
   /** Optional class name for the wrapper. */
   className?: string;
+  /** When set (e.g. in pan/zoom modal), diagram is rendered at this size for high resolution; scale the wrapper to fit. */
+  intrinsicSize?: MermaidDiagramIntrinsicSize;
 }
 
-export function MermaidDiagram({ source, className }: MermaidDiagramProps): React.ReactElement {
+export function MermaidDiagram({ source, className, intrinsicSize }: MermaidDiagramProps): React.ReactElement {
   const id = useId().replace(/:/g, '-');
   const containerRef = useRef<HTMLDivElement>(null);
   const [svgContent, setSvgContent] = useState<string | null>(null);
@@ -142,11 +151,22 @@ export function MermaidDiagram({ source, className }: MermaidDiagramProps): Reac
     );
   }
 
-  return (
+  const wrapperClassName = intrinsicSize
+    ? `mermaid-diagram overflow-x-auto my-4 flex justify-center [&_svg]:w-full [&_svg]:h-full [&_svg]:object-contain ${className ?? ''}`
+    : `mermaid-diagram overflow-x-auto my-4 flex justify-center [&_svg]:max-w-full [&_svg]:h-auto ${className ?? ''}`;
+
+  const wrapperStyle: React.CSSProperties = intrinsicSize
+    ? { width: intrinsicSize.width, height: intrinsicSize.height }
+    : undefined;
+
+  const inner = (
     <div
       ref={containerRef}
-      className={`mermaid-diagram overflow-x-auto my-4 flex justify-center [&_svg]:max-w-full [&_svg]:h-auto ${className ?? ''}`}
+      className={wrapperClassName}
+      style={wrapperStyle}
       dangerouslySetInnerHTML={svgContent ? { __html: svgContent } : undefined}
     />
   );
+
+  return inner;
 }
