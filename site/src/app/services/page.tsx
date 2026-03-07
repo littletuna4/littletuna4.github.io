@@ -37,7 +37,7 @@ const services: readonly ServiceLink[] = [
   },
   {
     label: 'noVNC (tonovnc)',
-    link: 'https://tonovnc-1040520853607.australia-southeast2.run.app/vnc.html',
+    link: 'https://tonovnc-1040520853607.australia-southeast2.run.app',
   },
   {
     label: 'cold_draw',

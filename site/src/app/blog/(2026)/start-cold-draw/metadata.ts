@@ -8,6 +8,6 @@ export const blogPostMetadata: PostMetadata = {
   image: './graph.png',
   imageAlt: 'Obsidian Graph',
   readingTime: 7,
-  isFeatured: false,
+  isFeatured: true,
 };
 
