@@ -11,25 +11,24 @@ import {
   BookOpen,
   Activity,
 } from 'lucide-react';
-import linksData from './data.json';
+import {
+  SHARED_APPLICATION_LINK_DEFINITIONS,
+  type SharedApplicationLinkDefinition,
+} from '@/data/links';
 
 /**
  * Links Section Component
  *
  * Functional Requirements:
- * - Display external links from data.json with proper labels
+ * - Display shared link definitions from the central app data module
  * - Show appropriate icons for each link type using lucide-react
  * - Handle email links with mailto: protocol
+ * - Handle internal app links without hardcoded route strings in consumers
  * - Support hover effects and smooth transitions
  * - Maintain responsive grid layout for different screen sizes
  * - Ensure all external links open in new tab with proper security attributes
  * - Provide accessible link labels and aria attributes
  */
-
-interface LinkData {
-  readonly label: string;
-  readonly url: string;
-}
 
 const getIconForLink = (label: string): React.ReactNode => {
   const iconProps = { className: 'w-5 h-5', 'aria-hidden': true as const };
@@ -69,7 +68,8 @@ const isExternalLink = (url: string): boolean => {
 };
 
 export default function LinksSection(): React.JSX.Element {
-  const links: readonly LinkData[] = linksData as readonly LinkData[];
+  const links: readonly SharedApplicationLinkDefinition[] =
+    SHARED_APPLICATION_LINK_DEFINITIONS;
 
   return (
     <section id='links' className='py-20 bg-background'>
@@ -80,7 +80,7 @@ export default function LinksSection(): React.JSX.Element {
           </h2>
         </div>
         <div className='grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
-          {links.map((link: LinkData) => {
+          {links.map((link: SharedApplicationLinkDefinition) => {
             const href = getHrefForLink(link.url);
             const external = isExternalLink(link.url);
 
