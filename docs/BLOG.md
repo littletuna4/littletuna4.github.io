@@ -11,6 +11,12 @@ The build script (`pnpm build:blog-index`) scans for both formats and writes `po
 
 Use **MDX** for typical prose posts. Use **TSX** when the post needs custom React layout, interactivity, or non-markdown structure (see `(2026)/intro-to-reqlan/page.tsx`).
 
+### Interactive graphs in TSX posts
+
+The intro-to-reqlan post embeds `ReqlanGraph.tsx`, which wraps the shared `BaseGraph` component (from `src/components/Industries/BaseGraph.tsx`) with post-specific node/edge data in `intro-to-reqlan/data/`. Nodes are grouped into five categories (language, data format, tool, concept, practice) with theme-aware colors. Graph data uses force layout with drag-and-pin interaction. Follow the same pattern for other posts: define nodes/edges in a `data/` module, build a graphology graph, and render via `BaseGraph` in a client component.
+
+TSX posts should use theme Tailwind tokens (`text-foreground`, `text-primary`, `border-border`, etc.) for typography and links. Keep monospace scoped to `<code>` / `<pre>` only — the blog layout’s `.mdx-content` class applies code styling automatically.
+
 ## Images in blog posts
 
 For MDX posts, use **imported Next.js images** instead of markdown image syntax.
