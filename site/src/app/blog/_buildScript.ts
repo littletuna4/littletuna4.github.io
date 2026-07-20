@@ -3,10 +3,12 @@
  * 
  * Functional Requirements:
  * - Scan the blog directory for blog post subdirectories
+ * - Detect posts with metadata.ts plus either page.mdx or page.tsx content
+ * - Prefer page.mdx and warn when both page.mdx and page.tsx exist in one post folder
  * - Extract metadata from each post's metadata.ts file
  * - Generate AllPosts array sorted by featured status, then by date
  * - Generate TagsIndex object grouping posts by tag
- * - Write the generated index to post_index.ts
+ * - Write the generated index to post_index.ts with correct content imports per format
  * - Emit a generation date in the generated file header
  * - Handle errors gracefully and provide useful logging
  */
@@ -32,9 +34,24 @@ function getScriptDir(): string {
 
 const scriptDir = getScriptDir();
 
+type BlogPostContentPageFileName = 'page.mdx' | 'page.tsx';
+
+function buildBlogPostContentImportPath(
+  postRelativePath: string,
+  contentPageFileName: BlogPostContentPageFileName
+): string {
+  const normalizedRelativePath = postRelativePath.replace(/\\/g, '/');
+  // MDX modules are declared with an explicit .mdx extension; TSX resolves via extensionless page import.
+  if (contentPageFileName === 'page.tsx') {
+    return `./${normalizedRelativePath}/page`;
+  }
+  return `./${normalizedRelativePath}/${contentPageFileName}`;
+}
+
 // Internal interface for build script use (similar to PostSpec but with build-time fields)
 interface BuildTimePostSpec extends Omit<PostSpec, 'Content'> {
   relativePath?: string; // Internal use for import paths
+  contentPageFileName: BlogPostContentPageFileName;
   Content: string; // Will be replaced in generated code (string during build, ComponentType in generated file)
 }
 
@@ -45,6 +62,35 @@ interface BuildTimePostSpec extends Omit<PostSpec, 'Content'> {
 interface PostPath {
   relativePath: string; // Path relative to blog dir, e.g., "(2025)/hello"
   slug: string; // Final slug for URL, e.g., "hello" (route groups removed)
+  contentPageFileName: BlogPostContentPageFileName;
+}
+
+/**
+ * Resolves which page file represents post content in a blog post directory.
+ * MDX is preferred when both formats are present.
+ */
+function resolveBlogPostContentPageFileName(postDirectoryPath: string): BlogPostContentPageFileName | null {
+  const mdxFilePath = join(postDirectoryPath, 'page.mdx');
+  const tsxFilePath = join(postDirectoryPath, 'page.tsx');
+  const hasMdxContentPage = existsSync(mdxFilePath);
+  const hasTsxContentPage = existsSync(tsxFilePath);
+
+  if (hasMdxContentPage && hasTsxContentPage) {
+    console.warn(
+      `  ⚠️  Post directory "${postDirectoryPath}" has both page.mdx and page.tsx; using page.mdx for index imports`
+    );
+    return 'page.mdx';
+  }
+
+  if (hasMdxContentPage) {
+    return 'page.mdx';
+  }
+
+  if (hasTsxContentPage) {
+    return 'page.tsx';
+  }
+
+  return null;
 }
 
 function scanBlogPostDirectoriesRecursive(
@@ -73,10 +119,10 @@ function scanBlogPostDirectoriesRecursive(
           (isRouteGroup || !entry.name.startsWith('_'))) {
         
         const metadataFile = join(entryPath, 'metadata.ts');
-        const mdxFile = join(entryPath, 'page.mdx');
+        const contentPageFileName = resolveBlogPostContentPageFileName(entryPath);
         
-        // Check if this directory has both metadata.ts and page.mdx (it's a blog post)
-        if (existsSync(metadataFile) && existsSync(mdxFile)) {
+        // Check if this directory has metadata.ts and a supported content page (MDX or TSX)
+        if (existsSync(metadataFile) && contentPageFileName) {
           // Extract slug by removing route groups from the path
           const slug = entryRelativePath
             .split(/[/\\]/)
@@ -85,7 +131,8 @@ function scanBlogPostDirectoriesRecursive(
           
           posts.push({
             relativePath: entryRelativePath.replace(/\\/g, '/'), // Normalize to forward slashes
-            slug: slug
+            slug: slug,
+            contentPageFileName,
           });
         } else {
           // Recursively scan subdirectories
@@ -205,8 +252,9 @@ function generatePostIndexContent(posts: BuildTimePostSpec[]): string {
   // Generate import statements for all post content
   const importStatements = sortedPosts.map(post => {
     const contentVarName = post.slug.replace(/[^a-zA-Z0-9]/g, '_') + 'Content';
-    const importPath = (post.relativePath || post.slug).replace(/\\/g, '/');
-    return `import ${contentVarName} from './${importPath}/page.mdx';`;
+    const importPath = post.relativePath || post.slug;
+    const contentImportPath = buildBlogPostContentImportPath(importPath, post.contentPageFileName);
+    return `import ${contentVarName} from '${contentImportPath}';`;
   }).join('\n');
 
   // Generate AllPosts array
@@ -388,10 +436,13 @@ function buildPostIndex(): void {
       posts.push({
         slug: postPath.slug,
         relativePath: postPath.relativePath,
+        contentPageFileName: postPath.contentPageFileName,
         ...metadata,
         Content: '', // Placeholder, will be replaced in the generated code
       });
-      console.log(`  - ${postPath.slug} (${postPath.relativePath}): ${metadata.title || 'Untitled'}`);
+      console.log(
+        `  - ${postPath.slug} (${postPath.relativePath}/${postPath.contentPageFileName}): ${metadata.title || 'Untitled'}`
+      );
     }
   }
 

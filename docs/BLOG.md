@@ -1,8 +1,19 @@
 # Blog
 
+## Post formats
+
+Blog posts live under `site/src/app/blog/` in year route groups (for example `(2026)/my-post/`). Each post folder needs:
+
+- `metadata.ts` exporting `blogPostMetadata` (see `_types.ts`)
+- Either `page.mdx` or `page.tsx` as the post content (default-export React component)
+
+The build script (`pnpm build:blog-index`) scans for both formats and writes `post_index.ts`. If a folder contains **both** `page.mdx` and `page.tsx`, MDX is used for index imports and a warning is logged.
+
+Use **MDX** for typical prose posts. Use **TSX** when the post needs custom React layout, interactivity, or non-markdown structure (see `(2026)/intro-to-reqlan/page.tsx`).
+
 ## Images in blog posts
 
-Blog post pages are MDX under `site/src/app/blog/`. Use **imported Next.js images** instead of markdown image syntax.
+For MDX posts, use **imported Next.js images** instead of markdown image syntax.
 
 1. Place image files (e.g. `.png`) in the same directory as the post’s `page.mdx`.
 2. At the top of the MDX file, import the image(s):
