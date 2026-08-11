@@ -22,6 +22,7 @@ import {
   S3ReqlanSection,
   S4SemanticProgrammingToolsetSection,
   S8ClosingThoughtsSection,
+  S9DevelopmentSection,
 } from "./sections";
 
 export default function IntroToReqlanPage(): React.JSX.Element {
@@ -56,7 +57,7 @@ export default function IntroToReqlanPage(): React.JSX.Element {
                 ▾
               </span>
             </summary>
-
+            <S9DevelopmentSection />
           </details>
 
           <S8ClosingThoughtsSection />
