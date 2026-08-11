@@ -8,7 +8,7 @@
  * - Describe Reqlan architecture, influences, infrastructure, and roadmap
  * - Provide paradigm comparison and a closing invite for feedback and contributors
  * - Compose content from numbered sections/ components (s1_–s8_); keep layout chrome here
- * - Show the Reqlan logo (logo.png) and Ed mascot (ed.png) in the article header via pan/zoom Image
+ * - Show Ed (ed.png), the Reqlan mascot, in the article header via pan/zoom Image
  * - Use theme Tailwind tokens for typography and links; monospace only on code/pre
  * - Remain fully responsive within the blog layout container
  * - Render glossary terms via styled Radix tooltip client components
@@ -18,7 +18,6 @@
 import React from "react";
 import { MdxImagePanzoomModalWrapper } from "@/components/ui/MdxImagePanzoomModalWrapper";
 import introToReqlanBlogPostEdMascotPng from "./ed.png";
-import introToReqlanBlogPostLogoPng from "./logo.png";
 import { IntroToReqlanBlogPostTooltipProvider } from "./ReqlanBlogPostTermWithTooltip";
 import {
   S1IntroductionSection,
@@ -34,22 +33,13 @@ export default function IntroToReqlanPage(): React.JSX.Element {
     <article className="reqlan-page-container w-full text-foreground">
       <header className="mb-8 border-b border-border pb-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
-          <div className="flex items-center justify-center gap-3 sm:justify-start shrink-0">
-            <MdxImagePanzoomModalWrapper
-              src={introToReqlanBlogPostLogoPng}
-              alt="Reqlan logo"
-              width={512}
-              height={512}
-              className="h-auto w-20 sm:w-24 mb-0"
-            />
-            <MdxImagePanzoomModalWrapper
-              src={introToReqlanBlogPostEdMascotPng}
-              alt="Ed, the Reqlan mascot"
-              width={500}
-              height={500}
-              className="h-auto w-20 sm:w-24 mb-0"
-            />
-          </div>
+          <MdxImagePanzoomModalWrapper
+            src={introToReqlanBlogPostEdMascotPng}
+            alt="Ed, the Reqlan mascot"
+            width={500}
+            height={500}
+            className="mx-auto h-auto w-28 shrink-0 sm:mx-0 sm:w-32 mb-0"
+          />
           <div className="min-w-0 text-center sm:text-left">
             <h1 className="text-foreground">Reqlan: Semantic Specification Protocol</h1>
             <p className="text-foreground-secondary text-lg mb-0">

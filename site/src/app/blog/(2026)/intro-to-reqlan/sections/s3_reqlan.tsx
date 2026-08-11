@@ -3,6 +3,7 @@
  *
  * Functional Requirements:
  * - Introduce the Reqlan open-source toolset and the semantic-requirements workflow it supports
+ * - Show the Reqlan logo (logo.png) at the section introduction via pan/zoom Image
  * - Summarize language, CLI, and extension capabilities
  * - Link ontology.rq, reqlan.com, and VS Code / Cursor install deeplinks
  * - List near-term next steps for the project
@@ -10,6 +11,8 @@
  */
 
 import React from "react";
+import { MdxImagePanzoomModalWrapper } from "@/components/ui/MdxImagePanzoomModalWrapper";
+import introToReqlanBlogPostLogoPng from "../logo.png";
 import { introToReqlanBlogPostThemedLinkClassName } from "./introToReqlanBlogPostThemedLinkClassName";
 
 const introToReqlanBlogPostReqlanWebsiteHref = "https://reqlan.com";
@@ -24,6 +27,17 @@ export default function S3ReqlanSection(): React.JSX.Element {
   return (
     <section className="space-y-4">
       <h2>reqlan</h2>
+
+      <figure className="my-4 flex justify-center">
+        <MdxImagePanzoomModalWrapper
+          src={introToReqlanBlogPostLogoPng}
+          alt="Reqlan logo"
+          width={512}
+          height={512}
+          className="h-auto w-32 sm:w-40 mb-0"
+        />
+      </figure>
+
       <p>
         I thank you for reading this far as so, as, up to this point I&apos;ve
         been parroting some stale foundational ideas. However, when considered

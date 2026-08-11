@@ -5,8 +5,8 @@ export const blogPostMetadata: PostMetadata = {
   date: new Date('2026-07-20'),
   tags: ['development', 'programming', 'language'],
   excerpt: 'A brief introduction to reqlan, a programming language and semantic framework for building and documenting declarative workflows.',
-  image: './logo.png',
-  imageAlt: 'Reqlan logo',
+  image: './ed.png',
+  imageAlt: 'Ed, the Reqlan mascot',
   readingTime: 15,
   isFeatured: true,
 };
