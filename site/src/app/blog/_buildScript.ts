@@ -10,11 +10,12 @@
  * - Generate TagsIndex object grouping posts by tag
  * - Write the generated index to post_index.ts with correct content imports per format
  * - Emit a generation date in the generated file header
+ * - Copy all colocated post image files into public/blog/{slug}/ for static serving
  * - Handle errors gracefully and provide useful logging
  */
 
-import { readdirSync, readFileSync, writeFileSync, existsSync } from 'fs';
-import { join, dirname } from 'path';
+import { readdirSync, readFileSync, writeFileSync, existsSync, mkdirSync, copyFileSync } from 'fs';
+import { join, dirname, extname } from 'path';
 import { fileURLToPath } from 'url';
 import { PostMetadata, PostSpec } from './_types';
 
@@ -382,33 +383,61 @@ ${tagsIndexContent}
 }
 
 /**
- * Copies blog post images to public directory for static serving
+ * Copies all colocated blog post images to public/blog/{slug}/ for static serving.
+ * Matches image extensions used by existing posts (PNG/JPEG/GIF/SVG/WebP/AVIF).
  */
+const blogPostColocatedStaticImageFileExtensions = new Set([
+  '.png',
+  '.jpg',
+  '.jpeg',
+  '.gif',
+  '.svg',
+  '.webp',
+  '.avif',
+]);
+
 function copyBlogImagesToPublic(posts: BuildTimePostSpec[]): void {
   const publicBlogDir = join(process.cwd(), 'public', 'blog');
-  
+
   for (const post of posts) {
-    if (post.image && post.relativePath) {
-      // Only process relative paths (colocated images)
-      if (post.image.startsWith('./') || (!post.image.startsWith('/') && !post.image.startsWith('http'))) {
-        const imageFileName = post.image.replace(/^\.\//, '');
-        const sourceImagePath = join(scriptDir, post.relativePath, imageFileName);
-        const destImageDir = join(publicBlogDir, post.slug);
-        const destImagePath = join(destImageDir, imageFileName);
-        
-        if (existsSync(sourceImagePath)) {
-          // Ensure destination directory exists
-          if (!existsSync(destImageDir)) {
-            const { mkdirSync } = require('fs');
-            mkdirSync(destImageDir, { recursive: true });
-          }
-          
-          // Copy image to public directory
-          const { copyFileSync } = require('fs');
-          copyFileSync(sourceImagePath, destImagePath);
-          console.log(`  📸 Copied image: ${post.slug}/${imageFileName}`);
-        }
+    if (!post.relativePath) {
+      continue;
+    }
+
+    const postSourceDirectoryPath = join(scriptDir, post.relativePath);
+    if (!existsSync(postSourceDirectoryPath)) {
+      continue;
+    }
+
+    const destinationBlogPostImageDirectoryPath = join(publicBlogDir, post.slug);
+    const postDirectoryEntries = readdirSync(postSourceDirectoryPath, {
+      withFileTypes: true,
+    });
+
+    for (const postDirectoryEntry of postDirectoryEntries) {
+      if (!postDirectoryEntry.isFile()) {
+        continue;
       }
+
+      const imageFileExtension = extname(postDirectoryEntry.name).toLowerCase();
+      if (!blogPostColocatedStaticImageFileExtensions.has(imageFileExtension)) {
+        continue;
+      }
+
+      if (!existsSync(destinationBlogPostImageDirectoryPath)) {
+        mkdirSync(destinationBlogPostImageDirectoryPath, { recursive: true });
+      }
+
+      const sourceImagePath = join(
+        postSourceDirectoryPath,
+        postDirectoryEntry.name,
+      );
+      const destinationImagePath = join(
+        destinationBlogPostImageDirectoryPath,
+        postDirectoryEntry.name,
+      );
+      copyFileSync(sourceImagePath, destinationImagePath);
+      console.log(`  📸 Copied image: ${post.slug}/${postDirectoryEntry.name}`);
     }
   }
 }

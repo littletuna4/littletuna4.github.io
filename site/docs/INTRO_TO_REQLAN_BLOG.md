@@ -6,12 +6,26 @@ Static TSX blog article at `src/app/blog/(2026)/intro-to-reqlan/`. Styling follo
 
 `page.tsx` owns article chrome only:
 
-- Header (title + subtitle)
+- Header (Reqlan logo + Ed mascot + title + subtitle)
 - Tooltip provider wrapper
 - Horizontal rules between major narrative blocks
 - Collapsible `<details>` around development/implementation notes
 
 Body copy lives in numbered `sections/sN_desc` files and is composed in reading order.
+
+## Images (static / public)
+
+Colocated next to `page.tsx` / `metadata.ts` like other posts (not under `assets/`):
+
+| File | Role |
+| --- | --- |
+| `logo.png` | Reqlan logo (512); featured `metadata.image`; header brand mark |
+| `logo-256.png` / `logo-128.png` | Smaller logo rasters |
+| `ed.svg` | Ed mascot source |
+| `ed.png` | Ed mascot raster (512); header |
+| `ed-256.png` / `ed-128.png` | Smaller Ed rasters |
+
+`pnpm build:blog-index` copies all colocated image files into `public/blog/intro-to-reqlan/` for static URLs (`/blog/intro-to-reqlan/logo.png`, `/blog/intro-to-reqlan/ed.png`, etc.). Regenerate size variants with `pnpm generate-ed-mascot-pngs` (bakes Ed SVG `transform` / `transform-box` into path coords before sharp/librsvg rasterize — otherwise the body/ears render malformed).
 
 ## Sections
 
@@ -33,4 +47,5 @@ Body copy lives in numbered `sections/sN_desc` files and is composed in reading 
 - `ReqlanBlogPostTermWithTooltip.tsx` — glossary tooltips (client)
 - `ReqlanGraph.tsx` — interactive ideas graph
 - `data/` — graph data and loader
-- `metadata.ts` — route metadata
+- `metadata.ts` — route metadata (`image: './logo.png'`)
+- `scripts/generate-intro-to-reqlan-ed-mascot-pngs.mjs` — sharp PNG generator for Ed + logo size variants

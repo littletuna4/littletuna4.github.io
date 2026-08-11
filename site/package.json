@@ -17,6 +17,7 @@
     "clean": "rm -rf .next out ../docs",
     "preview": "npx serve ../docs",
     "generate-favicons": "node scripts/generate-favicons.js",
+    "generate-ed-mascot-pngs": "node scripts/generate-intro-to-reqlan-ed-mascot-pngs.mjs",
     "convert-images": "node scripts/convert-to-webp.js"
   },
   "dependencies": {
