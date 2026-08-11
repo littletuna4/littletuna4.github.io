@@ -51,16 +51,17 @@ export default function S3ReqlanSection(): React.JSX.Element {
         >
           reqlan
         </a>{" "}
-        that support it.
+        that supports it.
       </p>
 
       <p>The workflow:</p>
       <ul className="list-disc pl-6 space-y-1">
-        <li>Write a graph of semantic requirements</li>
-        <li>Store as text in repository</li>
         <li>
-          Store requirements as atomic ideas
+        Write a graph of semantic requirements
           <ul className="list-disc pl-6 mt-1 space-y-1">
+        <li>Stored as (close-to) plain text </li>
+          <li>As atomic connected ideas</li>
+          <li>Version controlled in a repository</li>
             <li>with tracked status</li>
             <li>
               With close integration to implementation, tests and related
