@@ -17,7 +17,7 @@ import { introToReqlanBlogPostThemedLinkClassName } from "./introToReqlanBlogPos
 
 const introToReqlanBlogPostReqlanWebsiteHref = "https://reqlan.com";
 const introToReqlanBlogPostOntologyRqGithubHref =
-  "https://github.com/littletuna4/reqlan/blob/main/reqlan%20rq/language/ontology.rq";
+  "https://github.com/littletuna4/reqlan/blob/main/reqlan%20rq/ontology.rq";
 const introToReqlanBlogPostVsCodeExtensionDeeplinkHref =
   "vscode:extension/reqlan.reqlan-extension";
 const introToReqlanBlogPostCursorExtensionDeeplinkHref =
