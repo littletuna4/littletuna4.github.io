@@ -1,14 +1,32 @@
-/* Ensure Sigma containers always have height */
-div[data-sigma-container] {
-  min-height: 400px !important;
-  /* Enable touch dragging by disabling browser gestures (pinch/scroll) inside graph */
-  touch-action: none;
+/**
+ * Sigma host CSS.
+ *
+ * Functional Requirements:
+ * - Fill the parent graph host (explicit pixel box) so WebGL canvases get a non-zero size
+ * - Promote the container onto its own compositor layer so iOS Safari paints WebGL inside rounded/clipped parents
+ * - Disable browser pan/zoom gestures inside the graph so node drag works on touch devices
+ */
+.react-sigma {
+  --sigma-background-color: transparent;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  transform: translateZ(0);
+  -webkit-transform: translate3d(0, 0, 0);
 }
 
-/* Force proper height for graph containers */
 .sigma-container {
-  height: 100% !important;
-  min-height: 400px !important;
-  /* Ensure pointer/touch events behave consistently */
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
   touch-action: none;
+  transform: translateZ(0);
+  -webkit-transform: translate3d(0, 0, 0);
+}
+
+.sigma-container canvas {
+  transform: translateZ(0);
+  -webkit-transform: translate3d(0, 0, 0);
 }

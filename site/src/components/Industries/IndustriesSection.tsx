@@ -1,5 +1,10 @@
-import dynamic from 'next/dynamic';
-
+/**
+ * Industries interests graph section.
+ *
+ * Functional Requirements:
+ * - Render the industries network graph in an explicit-height host so Sigma.js can size on mobile
+ * - Use theme card/border tokens and keep the graph full-width within the page container
+ */
 import IndustriesGraph from './IndustriesGraph';
 
 export default function IndustriesSection() {
@@ -11,7 +16,7 @@ export default function IndustriesSection() {
             <h2 className='text-3xl md:text-4xl font-bold mb-4'>Interests </h2>
           </div>
 
-          <div className='relative w-full bg-card rounded-lg border border-border overflow-hidden shadow-lg h-[600px]'>
+          <div className='relative isolate h-[600px] w-full overflow-hidden rounded-lg border border-border bg-card shadow-lg [transform:translateZ(0)]'>
             <IndustriesGraph />
           </div>
         </div>

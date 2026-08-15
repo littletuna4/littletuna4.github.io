@@ -5,7 +5,7 @@
  * - Reuse BaseGraph for drag, theme, and layout behavior
  * - Support light and dark mode via ThemeProvider
  * - Client-side only rendering to prevent SSR issues with Sigma.js
- * - Responsive container with configurable minimum height
+ * - Fill a parent with an explicit height so Sigma.js gets a non-zero pixel box on mobile
  */
 
 import React, { useEffect, useMemo, useState } from 'react';

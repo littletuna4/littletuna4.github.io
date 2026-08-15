@@ -6,8 +6,6 @@
  * - Keep import paths stable for the page composer (s1_, s2_, s3_, s4_… through s8_)
  */
 
-import { exportPages } from "next/dist/export/worker";
-
 export { default as S1IntroductionSection } from "./s1_introduction";
 export { default as S2LlmsAsTranspilersSection } from "./s2_llmsAsTranspilers";
 export { default as S3ReqlanSection } from "./s3_reqlan";

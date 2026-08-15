@@ -10,10 +10,13 @@
  * - Configurable graph data source
  * - Customizable styling and behavior
  * - Touch and pointer interaction support for drag, move, and release
+ * - Size Sigma from the host element's real pixel box (not percentage-only CSS)
+ * - Resynchronize the WebGL renderer on resize, orientation change, and when the graph enters the viewport
  *
  */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
+import type Graph from 'graphology';
 
 import {
   SigmaContainer,
@@ -66,8 +69,17 @@ export interface NoverlapLayoutConfig {
   nodeProperty: string;
 }
 
+const SIGMA_CONTAINER_DEFAULT_SETTINGS = {
+  allowInvalidContainer: true,
+};
+
+export interface GraphHostClientPixelDimensions {
+  width: number;
+  height: number;
+}
+
 export interface BaseGraphProps {
-  graphData: any; // Graph data from getIndustryGraph or similar
+  graphData: Graph;
   layout: string;
   isLayoutRunning: boolean;
   dragMode: boolean;
@@ -83,7 +95,7 @@ export interface BaseGraphProps {
 }
 
 const BaseGraphCore: React.FC<{
-  graphData: any;
+  graphData: Graph;
   layout: string;
   isLayoutRunning: boolean;
   dragMode: boolean;
@@ -541,6 +553,65 @@ const BaseGraphCore: React.FC<{
     };
   }, [dragMode, draggedNode, sigma, setDraggedNode, dragLockMode]);
 
+  useEffect(() => {
+    const sigmaContainerElement = sigma.getContainer();
+
+    const synchronizeSigmaRendererWithVisibleContainerSize = (): void => {
+      if (
+        sigmaContainerElement.offsetWidth === 0 ||
+        sigmaContainerElement.offsetHeight === 0
+      ) {
+        return;
+      }
+      sigma.resize(true);
+      sigma.refresh();
+    };
+
+    synchronizeSigmaRendererWithVisibleContainerSize();
+
+    const sigmaContainerResizeObserver = new ResizeObserver(
+      synchronizeSigmaRendererWithVisibleContainerSize
+    );
+    sigmaContainerResizeObserver.observe(sigmaContainerElement);
+
+    const sigmaContainerIntersectionObserver = new IntersectionObserver(
+      (intersectionObserverEntries) => {
+        if (
+          intersectionObserverEntries.some(
+            (intersectionObserverEntry) =>
+              intersectionObserverEntry.isIntersecting
+          )
+        ) {
+          synchronizeSigmaRendererWithVisibleContainerSize();
+        }
+      }
+    );
+    sigmaContainerIntersectionObserver.observe(sigmaContainerElement);
+
+    const visualViewport = window.visualViewport;
+    window.addEventListener(
+      'orientationchange',
+      synchronizeSigmaRendererWithVisibleContainerSize
+    );
+    visualViewport?.addEventListener(
+      'resize',
+      synchronizeSigmaRendererWithVisibleContainerSize
+    );
+
+    return () => {
+      sigmaContainerResizeObserver.disconnect();
+      sigmaContainerIntersectionObserver.disconnect();
+      window.removeEventListener(
+        'orientationchange',
+        synchronizeSigmaRendererWithVisibleContainerSize
+      );
+      visualViewport?.removeEventListener(
+        'resize',
+        synchronizeSigmaRendererWithVisibleContainerSize
+      );
+    };
+  }, [sigma]);
+
   return null;
 };
 
@@ -559,43 +630,94 @@ const BaseGraph: React.FC<BaseGraphProps> = ({
   className = 'h-full w-full relative bg-background',
   style,
 }) => {
+  const graphHostElementReference = useRef<HTMLDivElement>(null);
   const [isMounted, setIsMounted] = useState(false);
+  const [
+    graphHostClientPixelDimensions,
+    setGraphHostClientPixelDimensions,
+  ] = useState<GraphHostClientPixelDimensions | null>(null);
 
-  // Ensure component only renders on client side
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // Don't render anything until mounted on client side
-  if (!isMounted) {
-    return (
-      <div className={className} style={{ ...style, minHeight }}>
+  useEffect(() => {
+    if (!isMounted) {
+      return;
+    }
+
+    const graphHostElement = graphHostElementReference.current;
+    if (!graphHostElement) {
+      return;
+    }
+
+    const recordGraphHostClientPixelDimensions = (): void => {
+      const width = graphHostElement.clientWidth;
+      const height = graphHostElement.clientHeight;
+      if (width === 0 || height === 0) {
+        return;
+      }
+      setGraphHostClientPixelDimensions((previousDimensions) => {
+        if (
+          previousDimensions &&
+          previousDimensions.width === width &&
+          previousDimensions.height === height
+        ) {
+          return previousDimensions;
+        }
+        return { width, height };
+      });
+    };
+
+    recordGraphHostClientPixelDimensions();
+    const graphHostResizeObserver = new ResizeObserver(
+      recordGraphHostClientPixelDimensions
+    );
+    graphHostResizeObserver.observe(graphHostElement);
+
+    return () => {
+      graphHostResizeObserver.disconnect();
+    };
+  }, [isMounted]);
+
+  return (
+    <div
+      ref={graphHostElementReference}
+      className={className}
+      style={{
+        ...style,
+        width: '100%',
+        height: '100%',
+        minHeight,
+        transform: 'translateZ(0)',
+      }}
+    >
+      {isMounted && graphHostClientPixelDimensions ? (
+        <SigmaContainer
+          style={{
+            width: graphHostClientPixelDimensions.width,
+            height: graphHostClientPixelDimensions.height,
+          }}
+          settings={SIGMA_CONTAINER_DEFAULT_SETTINGS}
+        >
+          <BaseGraphCore
+            graphData={graphData}
+            layout={layout}
+            isLayoutRunning={isLayoutRunning}
+            dragMode={dragMode}
+            draggedNode={draggedNode}
+            setDraggedNode={setDraggedNode}
+            dragLockMode={dragLockMode}
+            forceConfig={forceConfig}
+            forceAtlas2Config={forceAtlas2Config}
+            noverlapConfig={noverlapConfig}
+          />
+        </SigmaContainer>
+      ) : (
         <div className='flex items-center justify-center h-full'>
           <div className='text-foreground'>Loading graph...</div>
         </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className={className} style={{ ...style, minHeight }}>
-      <SigmaContainer
-        style={{ height: '100%', width: '100%' }}
-        settings={{ allowInvalidContainer: true }}
-      >
-        <BaseGraphCore
-          graphData={graphData}
-          layout={layout}
-          isLayoutRunning={isLayoutRunning}
-          dragMode={dragMode}
-          draggedNode={draggedNode}
-          setDraggedNode={setDraggedNode}
-          dragLockMode={dragLockMode}
-          forceConfig={forceConfig}
-          forceAtlas2Config={forceAtlas2Config}
-          noverlapConfig={noverlapConfig}
-        />
-      </SigmaContainer>
+      )}
     </div>
   );
 };

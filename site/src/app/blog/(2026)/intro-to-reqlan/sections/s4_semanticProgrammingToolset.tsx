@@ -6,6 +6,7 @@
  * - Display the interactive ideas graph (ReqlanBlogPostIdeasGraph via BaseGraph)
  * - Render glossary terms via ReqlanBlogPostTermWithTooltip
  * - Use theme tokens for secondary caption text and card chrome; remain fully responsive
+ * - Give the ideas graph an explicit pixel height so Sigma.js WebGL can size on mobile
  */
 
 import React from "react";
@@ -55,8 +56,8 @@ export default function S4SemanticProgrammingToolsetSection(): React.JSX.Element
           by language, data format, tool, concept, and practice. Double-click to
           pin a node in place.
         </p>
-        <div className="relative w-full bg-card rounded-lg border border-border overflow-hidden shadow-sm h-[min(480px,70vh)] min-h-[320px]">
-          <ReqlanBlogPostIdeasGraph minHeight="320px" />
+        <div className="relative isolate h-80 w-full overflow-hidden rounded-lg border border-border bg-card shadow-sm [transform:translateZ(0)] sm:h-[28rem]">
+          <ReqlanBlogPostIdeasGraph minHeight="20rem" />
         </div>
       </div>
 
